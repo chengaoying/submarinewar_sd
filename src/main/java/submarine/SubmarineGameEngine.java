@@ -1238,9 +1238,9 @@ public class SubmarineGameEngine extends GameCanvasEngine implements Common{
 				medal=0;
 				medal2=0;
 				medal3=0;
-				hasPropReward=false;
+				/*hasPropReward=false;
 				hasPropReward2=false;
-				hasPropReward3=false;
+				hasPropReward3=false;*/
 				difficultLevel = 0;
 				Propety.useHidePropNum=0;
 				Propety.useLimitBooldPropNum=0;
