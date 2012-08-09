@@ -17,6 +17,7 @@ import cn.ohyeah.stb.util.RandomValue;
 import cn.ohyeah.stb.key.KeyCode;
 
 public class SubmarineGameEngine extends GameCanvasEngine implements Common{
+	public static boolean OPENBETA_VERSION = true;
 	
 	public static boolean isSupportFavor = false;	
 	public static int ScrW = 0;
@@ -69,7 +70,7 @@ public class SubmarineGameEngine extends GameCanvasEngine implements Common{
 	public static long revivalTime1=0, revivalTime2=0; //舰艇复活时间
 	public static long netTime, netTime2;  //被网住的时间
 	public static int currLevel; //关卡等级
-	public static int passState = -2; //通关成功或失败   -1,失败  0,过关  1,通关
+	public static int passState = -2; //通关成功或失败   -1,失败  0,过关  1,通关, -3,公测结束
 	public static long gameBufferStartTime, gameBufferEndTime;
 	public static long warnStartTime, warnEndTime; //boss出现警告时间
 	public static  boolean rechargeState;//, isEnoughMoney;
@@ -349,6 +350,12 @@ public class SubmarineGameEngine extends GameCanvasEngine implements Common{
 			mainIndex=0;
 			d_index=0;
 		}
+		if(keyState.contains(KeyCode.BACK)){
+			keyState.remove(KeyCode.BACK);
+			status = GAME_STATUS_MAIN_MENU;
+			mainIndex=0;
+			d_index=0;
+		}
 		if(keyState.containsAndRemove(KeyCode.DOWN)){
 			if(isOpenDifficult2 && !isOpenDifficult3){
 				d_index = (d_index+1)%2;
@@ -390,6 +397,12 @@ public class SubmarineGameEngine extends GameCanvasEngine implements Common{
 	private int m_index=0;
 	private void processGameMenu() {
 		isMenu = true;
+		if(keyState.contains(KeyCode.NUM0 | KeyCode.BACK)){
+			keyState.remove(KeyCode.NUM0);
+			keyState.remove(KeyCode.BACK);
+			isMenu=false;
+			status=GAME_STATUS_PLAYING;
+		}
 		if(keyState.contains(KeyCode.DOWN)){
 			keyState.remove(KeyCode.DOWN);
 			m_index = (m_index+1)%3;
@@ -593,7 +606,8 @@ public class SubmarineGameEngine extends GameCanvasEngine implements Common{
 					}
 				}
 			}
-		}else if(keyState.containsAndRemove(KeyCode.NUM0 | KeyCode.BACK)){ //进入游戏中的菜单
+		}else if(keyState.contains(KeyCode.NUM0)){ //进入游戏中的菜单
+			keyState.remove(KeyCode.BACK);
 			status=GAME_STATUS_PALYING_MENU;
 		}
 		
@@ -685,14 +699,39 @@ public class SubmarineGameEngine extends GameCanvasEngine implements Common{
 			gameBufferEndTime = System.currentTimeMillis()/1000;
 			if((gameBufferEndTime-gameBufferStartTime)>1){
 				if(currLevel<5){				//过关
-					passState=0;
-					own.mapx = 185;
-					own.nonceLife = own.limitLife;
+					if(currLevel==3 && OPENBETA_VERSION){
+						PopupText pop = UIResource.getInstance().buildDefaultPopupText();
+						pop.setText("公测版到此结束，请留意正式版");
+						pop.popup();
+						status = GAME_STATUS_MAIN_MENU;
+						mainIndex=0;
+					} else {
+						passState=0;
+						own.mapx = 185;
+						own.nonceLife = own.limitLife;
+						status=GAME_STATUS_PASS;
+						ServiceWrapper sw = getServiceWrapper();
+						GameAttainment ga = sw.readAttainment(attainmentId);
+						if(((ga==null && own.scores>0) || (ga.getScores()<=own.scores) && own.scores>0)){
+							gameRecord.saveGameAttainment(own, boss, currLevel);
+						}
+						Propety.useHidePropNum=0;
+						Propety.useLimitBooldPropNum=0;
+						Propety.useMedigelPropNum=0;
+					}
 				}else{     						//通关
 					passState=1;
+					status=GAME_STATUS_PASS;
+					ServiceWrapper sw = getServiceWrapper();
+					GameAttainment ga = sw.readAttainment(attainmentId);
+					if(((ga==null && own.scores>0) || (ga.getScores()<=own.scores) && own.scores>0)){
+						gameRecord.saveGameAttainment(own, boss, currLevel);
+					}
+					Propety.useHidePropNum=0;
+					Propety.useLimitBooldPropNum=0;
+					Propety.useMedigelPropNum=0;
 				}
 				//isBoss5War = false;
-				status=GAME_STATUS_PASS;
 				g_status=GAME_SUB_STATUS_PLAYING_NPC;
 				dartleFlag = false;
 				own.scores += boss.scores;
@@ -706,15 +745,6 @@ public class SubmarineGameEngine extends GameCanvasEngine implements Common{
 				if((medal+4*medal2+16*medal3)<=64-4){
 					medal2++;
 				}
-				
-				ServiceWrapper sw = getServiceWrapper();
-				GameAttainment ga = sw.readAttainment(attainmentId);
-				if(((ga==null && own.scores>0) || (ga.getScores()<=own.scores) && own.scores>0)){
-					gameRecord.saveGameAttainment(own, boss, currLevel);
-				}
-				Propety.useHidePropNum=0;
-				Propety.useLimitBooldPropNum=0;
-				Propety.useMedigelPropNum=0;
 			}
 		}
 	}
@@ -875,100 +905,97 @@ public class SubmarineGameEngine extends GameCanvasEngine implements Common{
 	public int confirm; //控制确认和返回
 	public static int submarineId=100; //用户舰艇id
 	private void processSelectSubmirine() {
-		
-		if (keyState.contains(KeyCode.BACK)){ //返回键直接退出
-			keyState.contains(KeyCode.BACK);
-			status=GAME_STATUS_DIFFICULTYLEVEL; //返回主菜单
-			draw.clearSelectSubmarine();
-			down = false;
-			index=0;
-			confirm=0;
-			index2=0;
-		}
-		
-		if(keyState.containsAndRemove(KeyCode.NUM0 | KeyCode.BACK)){
-			status=GAME_STATUS_DIFFICULTYLEVEL; //返回主菜单
-			draw.clearSelectSubmarine();
-			down = false;
-			index=0;
-			confirm=0;
-			index2=0;
-		}
-		
-		if(keyState.contains(KeyCode.LEFT)){		
-			keyState.remove(KeyCode.LEFT);
-			if(!down){
-				if(index>0){
-					index = (index-1)%3;
-				}
-				index2=0;
-			}else{
+		if(keyState.contains(KeyCode.NUM0) || keyState.contains(KeyCode.BACK)){
+			if(keyState.contains(KeyCode.NUM0)){
+				keyState.remove(KeyCode.BACK);
+				status=GAME_STATUS_DIFFICULTYLEVEL; //返回主菜单
+				draw.clearSelectSubmarine();
+				down = false;
+				index=0;
 				confirm=0;
+				index2=0;
 			}
-			/*
-			if(index==1 || index==2){
-				if(propety.queryOwnProp(engineService, 43)!=null){
-					isPurchase2 = true;
-					System.out.println("isPurchase2:"+isPurchase2);
+			
+			if(keyState.contains(KeyCode.LEFT)){		
+				keyState.remove(KeyCode.LEFT);
+				if(!down){
+					if(index>0){
+						index = (index-1)%3;
+					}
+					index2=0;
+				}else{
+					confirm=0;
 				}
-				if(propety.queryOwnProp(engineService, 42)!=null){
-					isPurchase = true;
-					System.out.println("isPurchase:"+isPurchase);
-				}
-			}*/
-		}
-		if(keyState.contains(KeyCode.RIGHT)){
-			keyState.remove(KeyCode.RIGHT);
-			if(!down){
-				if(index<2){
-					index = (index+1)%3;
-				}
-				index2=1;
-			}else{
-				confirm=1;
+				/*
+				if(index==1 || index==2){
+					if(propety.queryOwnProp(engineService, 43)!=null){
+						isPurchase2 = true;
+						System.out.println("isPurchase2:"+isPurchase2);
+					}
+					if(propety.queryOwnProp(engineService, 42)!=null){
+						isPurchase = true;
+						System.out.println("isPurchase:"+isPurchase);
+					}
+				}*/
 			}
-		}
-		if(keyState.contains(KeyCode.DOWN)){
-			keyState.remove(KeyCode.DOWN);
-			down = true;
-		}
-		if(keyState.contains(KeyCode.UP)){
-			keyState.remove(KeyCode.UP);
-			down = false;
-		}
-		if(keyState.contains(KeyCode.OK)){
-			keyState.remove(KeyCode.OK);
-			if(down){
-				if(confirm==0){
-					if((submarineId==101 && !isPurchase) || (submarineId==102 && !isPurchase2)){
-						propety.purchaseProp(null, submarineId, 0, engineService);
+			if(keyState.contains(KeyCode.RIGHT)){
+				keyState.remove(KeyCode.RIGHT);
+				if(!down){
+					if(index<2){
+						index = (index+1)%3;
+					}
+					index2=1;
+				}else{
+					confirm=1;
+				}
+			}
+			if(keyState.contains(KeyCode.DOWN)){
+				keyState.remove(KeyCode.DOWN);
+				down = true;
+			}
+			if(keyState.contains(KeyCode.UP)){
+				keyState.remove(KeyCode.UP);
+				down = false;
+			}
+			if(keyState.contains(KeyCode.OK)){
+				keyState.remove(KeyCode.OK);
+				if(down){
+					if(confirm==0){
+						if((submarineId==101 && !isPurchase) || (submarineId==102 && !isPurchase2)){
+							if(OPENBETA_VERSION){
+								PopupText pop = UIResource.getInstance().buildDefaultPopupText();
+								pop.setText("公测期间不支持舰艇购买");
+								pop.popup();
+							}else{
+								propety.purchaseProp(null, submarineId, 0, engineService);
+							}
+						}else{
+							status=GAME_STATUS_SELECT_LEVEL; //进入关卡选择界面
+							levelStime = System.currentTimeMillis()/1000;
+							draw.clearSelectSubmarine();
+						}
 					}else{
-						status=GAME_STATUS_SELECT_LEVEL; //进入关卡选择界面
-						levelStime = System.currentTimeMillis()/1000;
+						status=GAME_STATUS_INIT; //返回主菜单
 						draw.clearSelectSubmarine();
 					}
-				}else{
-					status=GAME_STATUS_INIT; //返回主菜单
-					draw.clearSelectSubmarine();
 				}
 			}
+			
+			if(index == 0){
+				selectL=1;
+				selectR=0;
+				submarineId=100;
+			}else if(index==1){
+				selectL=0;
+				selectR=0;
+				submarineId=101;
+			}else if(index==2){
+				selectL=0;
+				selectR=1;
+				submarineId=102;
+			}
 		}
-		
-		if(index == 0){
-			selectL=1;
-			selectR=0;
-			submarineId=100;
-		}else if(index==1){
-			selectL=0;
-			selectR=0;
-			submarineId=101;
-		}else if(index==2){
-			selectL=0;
-			selectR=1;
-			submarineId=102;
-		}
-	}
-
+    }
 	private void processSelectLevel() {
 		if(isNewGame){
 			own = createRole.createOwn(difficultLevel);
@@ -1091,13 +1118,25 @@ public class SubmarineGameEngine extends GameCanvasEngine implements Common{
 			keyState.remove(KeyCode.OK);
 			if(shopX==2){ //进入充值
 				//status = GAME_STATUS_RECHARGE;
-				draw.clearShop();
-				processRecharge();
+				if(OPENBETA_VERSION){
+					PopupText pop = UIResource.getInstance().buildDefaultPopupText();
+					pop.setText("公测期间暂不开放充值");
+					pop.popup();
+				}else{
+					draw.clearShop();
+					processRecharge();
+				}
 			}else{
-				propety.purchaseProp(own, shopX, shopY, engineService); //购买道具
-				//propety.queryOwnAllProps(engineService);
-				//status = GAME_STATUS_PURCHASING_STATE;
-				//convertStatus = 0;
+				if(OPENBETA_VERSION){
+					PopupText pop = UIResource.getInstance().buildDefaultPopupText();
+					pop.setText("公测期间不支持道具购买");
+					pop.popup();
+				}else{
+					propety.purchaseProp(own, shopX, shopY, engineService); //购买道具
+					//propety.queryOwnAllProps(engineService);
+					//status = GAME_STATUS_PURCHASING_STATE;
+					//convertStatus = 0;
+				}
 			}
 		}
 	}
@@ -1171,7 +1210,7 @@ public class SubmarineGameEngine extends GameCanvasEngine implements Common{
 		} else if (keyState.contains(KeyCode.OK)) {
 			keyState.remove(KeyCode.OK);
 			processSubMenu();
-	    } /*else if (keyState.contains(KeyCode.RIGHT)) {
+	    }/* else if (keyState.contains(KeyCode.RIGHT)) {
 	    	keyState.remove(KeyCode.RIGHT);
 	    	favorIndex = 1;
 	    	

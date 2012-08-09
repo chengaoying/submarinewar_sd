@@ -27,7 +27,7 @@ public class DrawGame implements Common{
 	}	
 
 	private Image imgMain1, imgMain2, imgMapUp, imgMapCenter, imgMapDown, imgMapRight, imgKa, imgInfo, imgConfirm, imgDirection,imgMain3, imgSubmirine;
-	private Image imgLevel, imgMain4, imgBiglevel, imgPrompt, imgRanking, imgShop, imgFavor;
+	private Image imgLevel, imgMain4, imgBiglevel, imgPrompt, imgRanking, imgShop, imgFavor, imgOpenBeta;
 	private Image imgBlood, imgBlood2, imgMenu, imgNumber2, imgGk, imgGameInfo, imgPass, imgOver,imgMedal,imgWarning;
 	private Image imgCallBoard, imgLock, imgPurchaseIcon, imgBoat, imgIceBerg, imgIceBerg2, imgPrompt2;
 	private Image imgRecharge, imgRechargeSuccess, imgRechargeFail, imgPurchaseSuccess, imgPurchaseFail, imgPassSelect;
@@ -125,6 +125,17 @@ public class DrawGame implements Common{
 				DrawUtil.drawRect(g, 538, 429, 83, 86, 2, 0XFFFF00);
 			}
 		}*/
+		
+		if(SubmarineGameEngine.OPENBETA_VERSION){
+			if(imgOpenBeta == null){
+				try {
+					imgOpenBeta = Image.createImage("/openbeta.png");
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+			g.drawImage(imgOpenBeta, 480, 112, TopLeft);
+		}
 	}
 	
 	/*游戏中*/
@@ -1064,9 +1075,9 @@ public class DrawGame implements Common{
 	
 	/*清主界面的图片*/
 	public void clearMain(){
-		if(imgMain1 != null || imgMain2 != null){
-			imgMain1 = null;
-			imgMain2 = null;
+		if(imgMain1 != null || imgMain2 != null || imgFavor!=null || imgOpenBeta!=null){
+			imgMain1 = null; imgFavor = null;
+			imgMain2 = null; imgOpenBeta = null;
 		}
 	}
 	
