@@ -27,7 +27,11 @@ public class DrawGame implements Common{
 	}	
 
 	private Image imgMain1, imgMain2, imgMapUp, imgMapCenter, imgMapDown, imgMapRight, imgKa, imgInfo, imgConfirm, imgDirection,imgMain3, imgSubmirine;
+<<<<<<< HEAD
 	private Image imgLevel, imgMain4, imgBiglevel, imgPrompt, imgRanking, imgShop, imgFavor, imgOpenBeta;
+=======
+	private Image imgLevel, imgMain4, imgBiglevel, imgPrompt, imgRanking, imgShop;
+>>>>>>> master
 	private Image imgBlood, imgBlood2, imgMenu, imgNumber2, imgGk, imgGameInfo, imgPass, imgOver,imgMedal,imgWarning;
 	private Image imgCallBoard, imgLock, imgPurchaseIcon, imgBoat, imgIceBerg, imgIceBerg2, imgPrompt2;
 	private Image imgRecharge, imgRechargeSuccess, imgRechargeFail, imgPurchaseSuccess, imgPurchaseFail, imgPassSelect;

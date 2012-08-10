@@ -57,6 +57,9 @@ public class SaveGameRecord implements Common{
 			dout.writeBoolean(SubmarineGameEngine.isOpenDifficult2);
 			dout.writeBoolean(SubmarineGameEngine.isOpenDifficult3);
 			dout.writeInt(own.scores2);
+			dout.writeBoolean(SubmarineGameEngine.hasPropReward);
+			dout.writeBoolean(SubmarineGameEngine.hasPropReward2);
+			dout.writeBoolean(SubmarineGameEngine.hasPropReward3);
 			if(SubmarineGameEngine.g_status==GAME_SUB_STATUS_PLAYING_BOSS){
 				dout.writeInt(boss.nonceLife);
 				dout.writeInt(boss.mapx);
@@ -84,6 +87,9 @@ public class SaveGameRecord implements Common{
 			System.out.println("nonceLife: " + own.nonceLife);
 			//System.out.println("id:" + own.id);
 			System.out.println("g_status: " + SubmarineGameEngine.g_status);
+			System.out.println("SubmarineGameEngine.hasPropReward: " + SubmarineGameEngine.hasPropReward);
+			System.out.println("SubmarineGameEngine.hasPropReward2: " + SubmarineGameEngine.hasPropReward2);
+			System.out.println("SubmarineGameEngine.hasPropReward3: " + SubmarineGameEngine.hasPropReward3);
 			
 			record = bout.toByteArray();
 			GameRecord gameRecord = new GameRecord();
@@ -146,6 +152,9 @@ public class SaveGameRecord implements Common{
 			SubmarineGameEngine.isOpenDifficult2 = din.readBoolean();
 			SubmarineGameEngine.isOpenDifficult3 = din.readBoolean();
 			SubmarineGameEngine.scores2 = din.readInt();
+			SubmarineGameEngine.hasPropReward = din.readBoolean();
+			SubmarineGameEngine.hasPropReward2 = din.readBoolean();
+			SubmarineGameEngine.hasPropReward3 = din.readBoolean();
 			if(SubmarineGameEngine.gameStatus==GAME_SUB_STATUS_PLAYING_BOSS){
 				SubmarineGameEngine.bossLife = din.readInt();
 				SubmarineGameEngine.bossMapx = din.readInt();
@@ -177,6 +186,9 @@ public class SaveGameRecord implements Common{
 			System.out.println("recordFlag: " + SubmarineGameEngine.recordFlag);
 			//System.out.println("id:" + SubmarineGameEngine.id);
 			System.out.println("gameStatus: " + SubmarineGameEngine.gameStatus);
+			System.out.println("SubmarineGameEngine.hasPropReward: " + SubmarineGameEngine.hasPropReward);
+			System.out.println("SubmarineGameEngine.hasPropReward2: " + SubmarineGameEngine.hasPropReward2);
+			System.out.println("SubmarineGameEngine.hasPropReward3: " + SubmarineGameEngine.hasPropReward3);
 		} catch (Exception e) {
 			System.out.println("没有游戏记录,开始新的游戏!");
 			return -1;
