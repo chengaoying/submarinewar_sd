@@ -32,7 +32,7 @@ public class DrawGame implements Common{
 	private Image imgCallBoard, imgLock, imgPurchaseIcon, imgBoat, imgIceBerg, imgIceBerg2, imgPrompt2;
 	private Image imgRecharge, imgRechargeSuccess, imgRechargeFail, imgPurchaseSuccess, imgPurchaseFail, imgPassSelect;
 	private Image imgDifficultLevel2, imgHelp, imgHelp2, imgRules,imgLifeNums, imgSubmarineName, imgPassBg, imgPassText, imgPassFireWork,imgDifficultLock;
-	private int menuW = 218, menuH = 43, W=218, H=43;
+	private int menuW = 295, menuH = 60;
 	private int promptIndex=0, promptFlag=4;
 	private boolean isPrompt = false, isFire2,isFire3,isFire4;
 	public static boolean isFireOver;
@@ -104,8 +104,8 @@ public class DrawGame implements Common{
 		g.setColor(0X000000);
 		g.fillRect(0, 0, screenW, screenH);
 		g.drawImage(imgMain1, 0, 0, TopLeft);
-		int menuAxis[][] = { { 200, 223 }, { 200, 270 }, { 200, 317 },
-				{ 200, 364 }, { 200, 411 },{ 200, 458 } };
+		int menuAxis[][] = { { 450, 280 }, { 450, 345 }, { 450, 410 },
+				{ 450, 475 }, { 450, 540 },{ 450, 605 } };
 		for (int i = 0; i < menuAxis.length; ++i) {
 			g.drawRegion(imgMain2, (index != i) ? 0 : menuW, i * menuH,
 					menuW, menuH, 0, menuAxis[i][0], menuAxis[i][1], 0);
@@ -147,13 +147,13 @@ public class DrawGame implements Common{
 	}
 
 	/*没有游戏记录时提示*/
-	private int FontH = 15;
+	private int FontH = 30;
 	public void drawNoRecord(Graphics g){
-		Font curFont = Font.getFont(Font.FACE_MONOSPACE, Font.STYLE_PLAIN, Font.SIZE_MEDIUM);
+		Font curFont = Font.getFont(Font.FACE_MONOSPACE, Font.STYLE_PLAIN, Font.SIZE_LARGE);
 		g.setFont(curFont);
-		int tw = curFont.stringWidth("没有游戏记录") + 30;
-		int th = FontH + 20;
-		int tx = 258;//screenW / 2 - tw / 2;
+		int tw = curFont.stringWidth("没有游戏记录") + 60;
+		int th = FontH + 30;
+		int tx = 525;//screenW / 2 - tw / 2;
 		int ty = screenH / 2 - th;
 		g.setClip(0, 0, screenW, screenH);
 		g.setColor(26, 131, 238); 
@@ -162,7 +162,7 @@ public class DrawGame implements Common{
 		g.drawRect(tx - 1, ty - 1, tw + 1, th + 1);// 画边
 		g.drawRect(tx - 2, ty - 2, tw + 3, th + 3);// 画边
 		g.setColor(0xffffff);
-		g.drawString("没有游戏记录", tx + 15, ty + 8, TopLeft);
+		g.drawString("没有游戏记录", tx + 30, ty + 16, TopLeft);
 	}
 	
 /*	private String getKeyCodeStr(int keyCode) {
@@ -309,17 +309,17 @@ public class DrawGame implements Common{
 			}
 		}
 		g.drawImage(imgMain1, 0, 0, TopLeft);
-		int menu[][] = { { 200, 223 }, { 200, 270 }, { 200, 317 }};
+		int menu[][] = { { 450, 280 }, { 450, 350 }, { 450, 420 }};
 		for (int i = 0; i < menu.length; ++i) {
-			g.drawRegion(imgDifficultLevel2, (index != i) ? 0 : W, i * H,
-					W, H, 0, menu[i][0], menu[i][1], 0);
+			g.drawRegion(imgDifficultLevel2, (index != i) ? 0 : menuW, i * menuH,
+					menuW, menuH, 0, menu[i][0], menu[i][1], 0);
 			
 		}
 		if(!SubmarineGameEngine.isOpenDifficult2){
-			g.drawImage(imgDifficultLock, 302, 278, TopLeft);
+			g.drawImage(imgDifficultLock, 578, 352, TopLeft);
 		}
 		if(!SubmarineGameEngine.isOpenDifficult3){
-			g.drawImage(imgDifficultLock, 302, 326, TopLeft);
+			g.drawImage(imgDifficultLock, 578, 422, TopLeft);
 		}
 	}
 	
@@ -743,27 +743,27 @@ public class DrawGame implements Common{
 	}
 	/*勋章*/
 	private void drawMedal(Graphics g, int x_dest, int y_dest){
-		int x = x_dest, y = y_dest, x1=0, x2=0, x3=0, temp=0;
+		int x = x_dest, y = y_dest, x1=0, x2=0, x3=0, temp=0, gap = 20;
 		for(int l=0;l<SubmarineGameEngine.medal3;l++){
-			x1 = l*12;
+			x1 = l*gap;
 			g.drawRegion(imgMedal, imgMedal.getWidth()/3, 0, imgMedal.getWidth()/3, imgMedal.getHeight(), 0, x+x1, y, TopLeft);
 		}
 		if(SubmarineGameEngine.medal3<1){
 			x2 = x;
 		}else{
-			x2 = x+x1+12;
+			x2 = x+x1+gap;
 		}
 		for(int k=0;k<SubmarineGameEngine.medal2;k++){
-			temp=k*12;
+			temp=k*gap;
 			g.drawRegion(imgMedal, 2*imgMedal.getWidth()/3, 0, imgMedal.getWidth()/3, imgMedal.getHeight(), 0, x2+temp, y, TopLeft);
 		}
 		if(SubmarineGameEngine.medal2<1){
 			x3 = x2;
 		}else{
-			x3 = x2+temp+12;
+			x3 = x2+temp+gap;
 		}
 		for(int j=0;j<SubmarineGameEngine.medal;j++){
-			g.drawRegion(imgMedal, 0, 0, imgMedal.getWidth()/3, imgMedal.getHeight(), 0, x3+j*11, y, TopLeft);
+			g.drawRegion(imgMedal, 0, 0, imgMedal.getWidth()/3, imgMedal.getHeight(), 0, x3+j*gap, y, TopLeft);
 		}
 	}
 	
@@ -779,15 +779,15 @@ public class DrawGame implements Common{
 			}
 		}
 		g.drawImage(imgMain3, 0, 0, TopLeft);
-		g.drawImage(imgCallBoard, 105, 0, TopLeft);
-		g.drawImage(imgPrompt2, 120, 138, TopLeft);
+		g.drawImage(imgCallBoard, 236, 0, TopLeft);
+		g.drawImage(imgPrompt2, 254, 157, TopLeft);
 		g.setColor(28, 213, 233);
-		engine.setFont(19);
+		engine.setFont(50);
 		String info = "";
 		for(int i=0;i<gameIntro.length;i++){
 			info += gameIntro[i];
 		}
-		TextView.showMultiLineText(g, info, 15, 134, 155, 380, 240);
+		TextView.showMultiLineText(g, info, 15, 290, 205, 600, 400);
 		engine.setDefaultFont();
 	}
 	
@@ -800,31 +800,32 @@ public class DrawGame implements Common{
 				e.printStackTrace();
 			}
 		}
-		engine.setFont(19);
+		engine.setFont(40);
 		g.drawImage(imgShop, 0, 0, TopLeft);
 		if(shopX<2){
 			//g.drawImage(imgShopSelect, 143+shopX*220, 127+shopY*100, TopLeft);
-			DrawUtil.drawRect(g, 145+shopX*220, 127+shopY*100, 78, 32, 2, 0XFFFF00);
+			DrawUtil.drawRect(g, 272+shopX*418, 158+shopY*129, 148, 48, 3, 0XFFFF00);
 			
 			//显示描述信息
 			g.setColor(28, 213, 233);
-			TextView.showMultiLineText(g, desc[shopY][shopX], 5, 478, 90, 143, 180);
+			TextView.showMultiLineText(g, desc[shopY][shopX], 5, 900, 120, 270, 286);
 		}else{
 			//g.drawImage(imgShopSelect2, 472, 343, TopLeft);
-			DrawUtil.drawRect(g, 472, 344, 145, 45, 2, 0XFFFF00);
+			DrawUtil.drawRect(g, 896, 545, 270, 58, 3, 0XFFFF00);
 		}
 		g.setColor(28, 213, 233);
-		g.drawString(String.valueOf(engine.getEngineService().getBalance()), 540, 293, TopLeft);
+		//g.drawString(String.valueOf(engine.getEngineService().getBalance()), 990, 465, TopLeft);
+		drawShopNum(g, engine.getEngineService().getBalance(),990, 459);
 		
 		/*道具价格*/
-		drawShopNum(g,20,180,99);
-		drawShopNum(g,30,180,199);
-		drawShopNum(g,40,180,299);
-		drawShopNum(g,50,180,399);
-		drawShopNum(g,30,402,99);
-		drawShopNum(g,30,402,199);
-		drawShopNum(g,40,402,299);
-		drawShopNum(g,60,402,399);
+		drawShopNum(g,20,326,122);
+		drawShopNum(g,30,326,250);
+		drawShopNum(g,40,326,378);
+		drawShopNum(g,50,326,506);
+		drawShopNum(g,30,748,122);
+		drawShopNum(g,30,748,250);
+		drawShopNum(g,40,748,378);
+		drawShopNum(g,60,748,506);
 		
 		/*道具数量*/
 		g.setColor(255, 255, 255);
@@ -836,15 +837,15 @@ public class DrawGame implements Common{
 		TextView.showSingleLineText(g, String.valueOf(propety.laserPropNum), 293, 310, 25, 25, 1);
 		TextView.showSingleLineText(g, String.valueOf(propety.medigelPropNum), 72, 410, 25, 25, 1);
 		TextView.showSingleLineText(g, String.valueOf(propety.limitBooldPropNum), 293, 410, 25, 25, 1);*/
-		
-		TextView.showSingleLineText(g, String.valueOf(propety.energyPropNum), 68, 110, 29, 25, 1);
-		TextView.showSingleLineText(g, String.valueOf(propety.hidePropNum), 291, 110, 29, 25, 1);
-		TextView.showSingleLineText(g, String.valueOf(propety.slowPropNum), 68, 210, 29, 25, 1);
-		TextView.showSingleLineText(g, String.valueOf(propety.airDropPropNum), 291, 210, 29, 25, 1);
-		TextView.showSingleLineText(g, String.valueOf(propety.dartlePropNum), 68, 310, 29, 25, 1);
-		TextView.showSingleLineText(g, String.valueOf(propety.laserPropNum), 291, 310, 29, 25, 1);
-		TextView.showSingleLineText(g, String.valueOf(propety.medigelPropNum), 68, 410, 29, 25, 1);
-		TextView.showSingleLineText(g, String.valueOf(propety.limitBooldPropNum), 291, 410, 25, 25, 1);
+		int mw = 42, mh = 40, mx = 139, mx2 = 556;
+		TextView.showSingleLineText(g, String.valueOf(propety.energyPropNum), mx, 128, mw, mh, 1);
+		TextView.showSingleLineText(g, String.valueOf(propety.hidePropNum), mx2, 128, mw, mh, 1);
+		TextView.showSingleLineText(g, String.valueOf(propety.slowPropNum), mx, 259, mw, mh, 1);
+		TextView.showSingleLineText(g, String.valueOf(propety.airDropPropNum), mx2, 259, mh, mh, 1);
+		TextView.showSingleLineText(g, String.valueOf(propety.dartlePropNum), mx, 383, mw, mh, 1);
+		TextView.showSingleLineText(g, String.valueOf(propety.laserPropNum), mx2, 383, mw, mh, 1);
+		TextView.showSingleLineText(g, String.valueOf(propety.medigelPropNum), mx, 516, mw, mh, 1);
+		TextView.showSingleLineText(g, String.valueOf(propety.limitBooldPropNum), mx2, 516, mw, mh, 1);
 		engine.setDefaultFont();
 	}
 	/*商城中的数字*/
@@ -858,8 +859,8 @@ public class DrawGame implements Common{
 		}
 		String number = String.valueOf(num);
 		for (byte i = 0; i < number.length(); i++) {
-			g.drawRegion(imgNumber2, (number.charAt(i) - '0') * 11, 0, 11, 19,
-					0, x + i * (11 + 1), y, 0);
+			g.drawRegion(imgNumber2, (number.charAt(i) - '0') * imgNumber2.getWidth()/10, 0, imgNumber2.getWidth()/10, imgNumber2.getHeight(),
+					0, x + i * (imgNumber2.getWidth()/10 + 1), y, 0);
 		}
 	}
 	
@@ -926,7 +927,7 @@ public class DrawGame implements Common{
 		}
 		g.drawImage(imgRanking, 0, 0, TopLeft);
 		g.setColor(190, 255, 255);
-		engine.setFont(19);
+		engine.setFont(40);
 		String ownRank="榜上无名!";
 		if(gameRanking!=null){
 			sortByMedalNum(gameRanking); //排序
@@ -946,10 +947,11 @@ public class DrawGame implements Common{
 					ownRank = String.valueOf(gameRanking[i].getRanking());
 				}
 				initMedalNum(medalNum);
-				TextView.showSingleLineText(g, String.valueOf(ranking), 35, 122+(i*35), 100, 35, 1);
-				TextView.showSingleLineText(g, str, 135, 122+(i*35), 125, 35, 1);
-				TextView.showSingleLineText(g, scores, 260, 122+(i*35), 100, 35, 1);
-				TextView.showSingleLineText(g, hitNum, 360, 122+(i*35), 105, 35, 1);
+				int h = 45;
+				TextView.showSingleLineText(g, String.valueOf(ranking), 62, 160+(i*h), 193, h, 1);
+				TextView.showSingleLineText(g, str, 255, 160+(i*h), 238, h, 1);
+				TextView.showSingleLineText(g, scores, 493, 160+(i*h), 193, h, 1);
+				TextView.showSingleLineText(g, hitNum, 686, 160+(i*h), 193, h, 1);
 				/*int idW = 104-g.getFont().stringWidth(id)/2;
 				int scoresW = 260-g.getFont().stringWidth(scores)/2;
 				int hitNumW = 390-g.getFont().stringWidth(hitNum)/2;
@@ -958,10 +960,10 @@ public class DrawGame implements Common{
 				g.drawString(scores, scoresW, y, TopLeft);
 				g.drawString(hitNum, hitNumW, y, TopLeft);*/
 				//画勋章
-				drawMedal(g, 480, 130+(i*35));
+				drawMedal(g, 877, 160+(i*h));
 			}
 		}
-		g.drawString(ownRank, 140, 498, TopLeft);
+		g.drawString(ownRank, 229, 638, TopLeft);
 		engine.setDefaultFont();
 	}
 	/*分数相同时按勋章数量排序*/
