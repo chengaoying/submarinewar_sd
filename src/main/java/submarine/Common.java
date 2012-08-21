@@ -37,8 +37,8 @@ public interface Common {
   /*公用变量*/
   public static int screenW = SubmarineGameEngine.ScrW;
   public static int screenH = SubmarineGameEngine.ScrH;
-  public static int gameMapX = 480; //游戏区域大小
-  public static int gameMapY = 485; //游戏区域大小	
+  public static int gameMapX = 910; //游戏区域大小
+  public static int gameMapY = 615; //游戏区域大小	
   public static Weapon weapon = new Weapon();
   public static Attacks attacks = new Attacks();
   public static byte TopLeft = Graphics.TOP | Graphics.LEFT;

@@ -1,6 +1,7 @@
 package submarine;
 
-import javax.microedition.lcdui.Graphics;
+import cn.ohyeah.stb.game.SGraphics;
+
 
 /**
  * ±¬Õ¨Ð§¹ûÀà
@@ -19,7 +20,7 @@ public class Exploder implements Common{
 		this.mapy = mapy;
 	}
 	
-	public void drawExplode(Graphics g, DrawGame drawGame){
+	public void drawExplode(SGraphics g, DrawGame drawGame){
 		if(i<13){
 			i++;
 		}

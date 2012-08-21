@@ -3,10 +3,10 @@ package submarine;
 import java.io.IOException;
 import java.util.Vector;
 
-import javax.microedition.lcdui.Graphics;
 import javax.microedition.lcdui.Image;
 import javax.microedition.lcdui.game.Sprite;
 
+import cn.ohyeah.stb.game.SGraphics;
 import cn.ohyeah.stb.util.RandomValue;
 
 /**
@@ -135,7 +135,7 @@ public class CreateRole implements Common {
 	}
 	
 	/*显示用户舰艇*/
-	public void showOwn(Graphics g, Role own){
+	public void showOwn(SGraphics g, Role own){
 		if(own.status==0){
 			g.drawRegion(imgOwn, ownPara[0][0]*(own.id-100), 0, ownPara[0][0], ownPara[0][1], 
 					own.direction == 0 ? Sprite.TRANS_MIRROR : 0, own.mapx, own.mapy, TopLeft);
@@ -187,7 +187,7 @@ public class CreateRole implements Common {
 	}
 	
 	/*显示NPC*/
-	public void showNpc(Graphics g, int difficultLevel){
+	public void showNpc(SGraphics g, int difficultLevel){
 		eTime = System.currentTimeMillis()/1000;
 		torpedoTime = System.currentTimeMillis()/1000;
 		torpedoTime3 = System.currentTimeMillis()/1000;
@@ -390,7 +390,7 @@ public class CreateRole implements Common {
 	}
 	
 	/*显示BOSS*/
-	public void showBoss(Role own, Role boss, Graphics g, int gateId, int difficultLevel){
+	public void showBoss(Role own, Role boss, SGraphics g, int gateId, int difficultLevel){
 		if(SubmarineGameEngine.isMenu){
 			boss.speed=0;
 		}else{
@@ -563,7 +563,7 @@ public class CreateRole implements Common {
 		}
 	}
 	
-	private void drawNonceLife(Graphics g, Role role, int gateId, int difficultLevel){
+	private void drawNonceLife(SGraphics g, Role role, int gateId, int difficultLevel){
 		g.drawRegion(imgLife, 0, 0, imgLife.getWidth(), imgLife.getHeight(), 0, role.mapx+8, role.mapy-10, TopLeft);
 		g.setColor(255, 0, 0);
 		g.fillRect(role.mapx+8, role.mapy+1-10, role.nonceLife*75/(bossPara[gateId-1][2]+difficultLevel*1500), 5);

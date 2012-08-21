@@ -1,6 +1,5 @@
 package submarine;
 
-import javax.microedition.lcdui.Graphics;
 import javax.microedition.midlet.MIDlet;
 
 import cn.ohyeah.itvgame.model.GameAttainment;
@@ -8,6 +7,7 @@ import cn.ohyeah.itvgame.model.GameRanking;
 import cn.ohyeah.itvgame.model.GameRecord;
 import cn.ohyeah.stb.game.Configurations;
 import cn.ohyeah.stb.game.GameCanvasEngine;
+import cn.ohyeah.stb.game.SGraphics;
 import cn.ohyeah.stb.game.ServiceWrapper;
 import cn.ohyeah.stb.game.StateRecharge;
 import cn.ohyeah.stb.res.UIResource;
@@ -211,25 +211,25 @@ public class SubmarineGameEngine extends GameCanvasEngine implements Common{
 		recharge.recharge();
 	}
 
-	private void showGameMenu(Graphics g) { //游戏中的菜单
+	private void showGameMenu(SGraphics g) { //游戏中的菜单
 		//showGamePlaying(g);
 		draw.drawPalyingMenu(g, m_index);
 	}
 	
 
-	private void showGameIntro(Graphics g) {
+	private void showGameIntro(SGraphics g) {
 		draw.drawGameIntro(g);
 	}
 	
-	private void showRankList(Graphics g){
+	private void showRankList(SGraphics g){
 		draw.drawRankList(g, gameRanking);
 	}
 	
-	private void showShop(Graphics g) {
+	private void showShop(SGraphics g) {
 		draw.drawShop(g, shopX, shopY, propety);
 	}
  
-	private void showGamePlaying(Graphics g) {
+	private void showGamePlaying(SGraphics g) {
 		if (isDebugMode()) {
 			addDebugUserMessage("1-8技能键:");
 		}
@@ -273,15 +273,15 @@ public class SubmarineGameEngine extends GameCanvasEngine implements Common{
 		}
 	}
 
-	private void showSelectSubmirine(Graphics g) {
+	private void showSelectSubmirine(SGraphics g) {
 		draw.drawSelectSubmarine(g, selectL, selectR, index, index2, down, confirm, submarineId, isPurchase, isPurchase2);
 	}
 
-	private void showSelectLevel(Graphics g) {
+	private void showSelectLevel(SGraphics g) {
 		draw.drawSelectLevel(g, currLevel);
 	}
 
-	public void showPassSuccess(Graphics g, int state){
+	public void showPassSuccess(SGraphics g, int state){
 		draw.drawUserGameInfo(g, state, currLevel, own, passIndex, difficultLevel);
 	}
 	
@@ -297,26 +297,26 @@ public class SubmarineGameEngine extends GameCanvasEngine implements Common{
 		createRole.showNpc(g, difficultLevel); //画敌方战舰
 	}
 
-	private void showMainMenu(Graphics g, int index) {
+	private void showMainMenu(SGraphics g, int index) {
 		draw.drawMainMenu(g, mainIndex, favorIndex);
 	}
 
-	private void showInit(Graphics g) {
+	private void showInit(SGraphics g) {
 		/*g.setColor(0X000000);
 		g.setClip(0, 0, screenW, screenH);
 		g.setColor(0Xffffff);
 		g.drawString("加载中,请稍后...", 300, 260, TopLeft);*/
 	}
 
-	private void showNoRecord(Graphics g){
+	private void showNoRecord(SGraphics g){
 		draw.drawNoRecord(g);
 	}
 	
-	private void showSelectDifficultyLevel(Graphics g){
+	private void showSelectDifficultyLevel(SGraphics g){
 		draw.drawDiffucltyLevel(g, d_index);
 	}
 	int helpIndex=0;
-	private void showHelp(Graphics g){
+	private void showHelp(SGraphics g){
 		draw.drawHelp(g, helpIndex);
 	}
 	
@@ -1234,6 +1234,7 @@ public class SubmarineGameEngine extends GameCanvasEngine implements Common{
 				status = GAME_STATUS_INTRO;
 				draw.clearMain();
 			} else if (mainIndex == 5) {// 退出
+				draw.clearBg();
 				updateProps(); //更新道具
 				exit = true;
 				draw.clearMain();

@@ -4,9 +4,11 @@ import java.io.IOException;
 import java.util.Random;
 import java.util.Vector;
 
-import javax.microedition.lcdui.Graphics;
 import javax.microedition.lcdui.Image;
 import javax.microedition.lcdui.game.Sprite;
+
+import cn.ohyeah.stb.game.SGraphics;
+
 
 /**
  * 武器技能类
@@ -107,7 +109,7 @@ public class Weapon implements Common {
 	}
 	
 	/*画普通攻击*/
-	public void showBomb(Graphics g, Role own){
+	public void showBomb(SGraphics g, Role own){
 		g.setClip(0, 0, gameMapX, gameMapY);
 		Weapon bomb = null;
 		for(int i=bombs.size()-1;i>=0;i--){
@@ -144,7 +146,7 @@ public class Weapon implements Common {
 	}
 	
 	/*敌方潜艇普通攻击*/
-	public void showBomb2(Graphics g, Role own, int level){
+	public void showBomb2(SGraphics g, Role own, int level){
 		Weapon bomb = null;
 		for(int i=bombs.size()-1;i>=0;i--){
 			bomb = (Weapon)bombs.elementAt(i);
@@ -213,7 +215,7 @@ public class Weapon implements Common {
 		lasers.addElement(w);
 	}
 	/*画  穿透激光弹*/
-	public void showLaser(Graphics g, Role own){
+	public void showLaser(SGraphics g, Role own){
 		Weapon laser=null;
 		for(int i=lasers.size()-1;i>=0;i--){
 			laser = (Weapon)lasers.elementAt(i);
@@ -257,7 +259,7 @@ public class Weapon implements Common {
 		paraDrops.addElement(w);
 	}
 	/*显示   呼叫空投--己方*/
-	public void showParaDrop(Graphics g){
+	public void showParaDrop(SGraphics g){
 		g.setClip(0, 0, gameMapX, gameMapY);
 		Weapon w = null;
 		for(int i=0;i<paraDrops.size();i++){
@@ -302,7 +304,7 @@ public class Weapon implements Common {
 		dartles.addElement(w);
 	}
 	/*显示   连射--己方*/
-	public void showDartle(Graphics g, int id){
+	public void showDartle(SGraphics g, int id){
 		g.setClip(0, 0, gameMapX, gameMapY);
 		Weapon w = null;
 		for(int i=0;i<dartles.size();i++){
@@ -346,7 +348,7 @@ public class Weapon implements Common {
 		energys.addElement(w);
 	}
 	/*画被攻击时的能量防护*/
-	public void showEnergyProtection(Graphics g, Role own){
+	public void showEnergyProtection(SGraphics g, Role own){
 		Weapon w = null;
 		for(int i=0;i<energys.size();i++){
 			w = (Weapon) energys.elementAt(i);
@@ -369,7 +371,7 @@ public class Weapon implements Common {
 		}
 	}
 	/*没被攻击时的能量保护*/
-	public void showEnergyProtection2(Graphics g, Role own){
+	public void showEnergyProtection2(SGraphics g, Role own){
 		g.drawRegion(imgProtect, 0, 0, 92, 91, 0, own.mapx, own.mapy-35, TopLeft);
 	}
 	
@@ -389,7 +391,7 @@ public class Weapon implements Common {
 		
 	}
 	/*显示BOSS呼叫空投技能*/
-	public void showBossSkill(Graphics g){
+	public void showBossSkill(SGraphics g){
 		g.setClip(0, 0, gameMapX, gameMapY);
 		Weapon w = null;
 		for(int i=0;i<airDrops.size();i++){
@@ -435,7 +437,7 @@ public class Weapon implements Common {
 		torpedos.addElement(w);
 	}
 	/*显示水雷技能*/
-	public void showTorpedo(Graphics g){
+	public void showTorpedo(SGraphics g){
 		Weapon w = null;
 		for(int i=0;i<torpedos.size();i++){
 			w = (Weapon) torpedos.elementAt(i);
@@ -496,7 +498,7 @@ public class Weapon implements Common {
 		nets.addElement(w);
 	}
 	/*显示BOSS技能--网*/
-	public void showNet(Graphics g, Role own){
+	public void showNet(SGraphics g, Role own){
 		Weapon w = null;
 		for(int i=0;i<nets.size();i++){
 			w = (Weapon) nets.elementAt(i);
@@ -548,7 +550,7 @@ public class Weapon implements Common {
 		}
 	}
 	/*画潜艇被网住的效果*/
-	public void showNetLocation(Graphics g, Role own){
+	public void showNetLocation(SGraphics g, Role own){
 		SubmarineGameEngine.netTime2 = System.currentTimeMillis()/1000;
 		if((SubmarineGameEngine.netTime2-SubmarineGameEngine.netTime)<=3){
 			g.drawImage(imgNet2, own.mapx, own.mapy, TopLeft);
@@ -559,7 +561,7 @@ public class Weapon implements Common {
 	}
 	
 	/*显示呼叫空投位置*/
-	public void showAirDropLocation(Graphics g){
+	public void showAirDropLocation(SGraphics g){
 		g.drawRegion(imgAirDrop2, airDropIndex*40, 0, 40, 40, 0, 100, 85, TopLeft);
 		g.drawRegion(imgAirDrop2, airDropIndex*40, 0, 40, 40, 0, 180, 85, TopLeft);
 		g.drawRegion(imgAirDrop2, airDropIndex*40, 0, 40, 40, 0, 260, 85, TopLeft);
