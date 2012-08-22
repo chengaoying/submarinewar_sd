@@ -112,7 +112,7 @@ public class DrawGame implements Common{
 		/*g.setClip(0, 0, screenW, screenH);
 		g.setColor(0X000000);
 		g.fillRect(0, 0, screenW, screenH);*/
-		g.drawImage(imgBg, -55, -20, TopLeft);
+		g.drawImage(imgBg, -35, -20, TopLeft);
 		g.drawImage(imgMain1, 0, 0, TopLeft);
 		int menuAxis[][] = { { 450, 280 }, { 450, 345 }, { 450, 410 },
 				{ 450, 475 }, { 450, 540 },{ 450, 605 } };
