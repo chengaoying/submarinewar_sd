@@ -63,16 +63,17 @@ public class Weapon implements Common {
 	/*武器参数*/
 	private int para[][]={
 			/*0-武器ID,1-武器宽度,2-武器高度,3-武器速度,4-武器伤害,5-移动方向(2下3上)*/
-			{11,16,71,10,100,2},		//普通攻击1
-			{12,46,36,10,150,2},		//普通攻击2
-			{13,10,45,12,200,2},		//普通攻击3
-			{14,16,71,15,300,2}, 	    //空投(技能)
+			{11,23,101,10,100,2},		//普通攻击1
+			{12,65,50,10,150,2},		//普通攻击2
+			{13,18,62,12,200,2},		//普通攻击3
+			{14,23,101,15,300,2}, 	    //空投(技能)
 			{15,46,36,10,100,2},		//连射(技能)
-			{16,163,368,0,8,2},			//穿透激光弹
-			{17,92,91,0,100,2},			//能量防护
-			{18,30,125,10,30,3},		//空投(敌方BOSS)
-			{19,23,14,8,30,3},	    	//水雷(敌方BOSS)
-			{20,9,27,9,0,3}, 			//网(敌方BOSS)	
+			{16,292,454,0,8,2},			//穿透激光弹
+			{17,161,159,0,100,2},		//能量防护
+			
+			{18,60,250,10,30,3},		//空投(敌方BOSS)
+			{19,46,28,8,30,3},	    	//水雷(敌方BOSS)
+			{20,18,54,9,0,3}, 			//网(敌方BOSS)	
 	};
 	
 	/**
@@ -125,7 +126,8 @@ public class Weapon implements Common {
 				tempy += bomb.speedY;
 				bomb.mapy = tempy;
 				if(own.id==100){
-					g.drawRegion(imgBomb, bombIndex*16, 0, 16, 71, 0, tempx, tempy, TopLeft);
+					int w = imgBomb.getWidth()/3, h = imgBomb.getHeight();
+					g.drawRegion(imgBomb, bombIndex*w, 0, w, h, 0, tempx, tempy, TopLeft);
 					if(bombFlag==0){
 						bombFlag++;
 					}else{
@@ -133,9 +135,11 @@ public class Weapon implements Common {
 						bombFlag=0;
 					}
 				}else if(own.id==101){
-					g.drawRegion(imgBomb2, 0, 0, 46, 36, 0, tempx, tempy, TopLeft);
+					int w2 = imgBomb2.getWidth(), h2 = imgBomb2.getHeight();
+					g.drawRegion(imgBomb2, 0, 0, w2, h2, 0, tempx, tempy, TopLeft);
 				}else if(own.id==102){
-					g.drawRegion(imgBomb3, 0, 0, 13, 45, 0, tempx, tempy, TopLeft);
+					int w3 = imgBomb3.getWidth(), h3 = imgBomb3.getHeight();
+					g.drawRegion(imgBomb3, 0, 0, w3, h3, 0, tempx, tempy, TopLeft);
 				}
 				if(tempy >= 530){
 					bombs.removeElement(bomb);
@@ -188,7 +192,8 @@ public class Weapon implements Common {
 					bombFlag=0;
 				}
 				g.setClip(0, 0, screenW, gameMapY);
-				g.drawRegion(imgBomb, bombIndex*16, 0, 16, 71, Sprite.TRANS_MIRROR_ROT180, tempx, tempy, TopLeft);
+				int w = imgBomb.getWidth()/3, h = imgBomb.getHeight();
+				g.drawRegion(imgBomb, bombIndex*w, 0, w, h, Sprite.TRANS_MIRROR_ROT180, tempx, tempy, TopLeft);
 				g.setClip(0, 0, screenW, screenH);
 				if(tempy<=own.mapy+own.height/2){
 					/*SubmarineGameEngine.bombFlag = true;
@@ -220,8 +225,8 @@ public class Weapon implements Common {
 		for(int i=lasers.size()-1;i>=0;i--){
 			laser = (Weapon)lasers.elementAt(i);
 			if(laser.direction==2){
-				laser.mapx=own.mapx-40;
-				laser.mapy=own.mapy+30;
+				//laser.mapx=own.mapx-40;
+				//laser.mapy=own.mapy+30;
 				g.drawRegion(imgLaser, laserIndex*laser.width, 0, laser.width, laser.height, 0, laser.mapx, laser.mapy, TopLeft);
 				if(laserFlag==0){
 					laserFlag++;
@@ -237,7 +242,7 @@ public class Weapon implements Common {
 					SubmarineGameEngine.endTime3 = System.currentTimeMillis()/1000;
 				}
 				System.out.println("(SubmarineGameEngine.endTime3-SubmarineGameEngine.startTime3)="+(SubmarineGameEngine.endTime3-SubmarineGameEngine.startTime3));
-				if((SubmarineGameEngine.endTime3-SubmarineGameEngine.startTime3)>=6){
+				if((SubmarineGameEngine.endTime3-SubmarineGameEngine.startTime3)>=8){
 					lasers.removeElement(laser);
 				}
 			}
@@ -280,12 +285,13 @@ public class Weapon implements Common {
 					bombIndex=(bombIndex+1)%3;
 					bombFlag=0;
 				}
-				g.drawRegion(imgBomb, bombIndex*16, 0, 16, 71, 0, tempX, tempY, TopLeft);
+				g.drawRegion(imgBomb, bombIndex*w.width, 0, w.width, w.height, 0, tempX, tempY, TopLeft);
+				
+				if(tempY >= 530){
+					paraDrops.removeElement(w);
+				}
 			}
 			
-			if((w.mapy+w.height) >= 530){
-				paraDrops.removeElement(w);
-			}
 		}
 		g.setClip(0, 0, screenW, screenH);
 	}
@@ -319,13 +325,13 @@ public class Weapon implements Common {
 				int tempY = w.mapy+w.speedY;
 				w.mapy = tempY;
 				if(id==100){
-					g.drawRegion(imgBomb, 0, 0, 16, 71, 0, tempX, tempY, TopLeft);
+					g.drawRegion(imgBomb, 0, 0, w.width, w.height, 0, tempX, tempY, TopLeft);
 				}else if(id==101){
-					g.drawRegion(imgBomb2, 0, 0, 46, 36, 0, tempX, tempY, TopLeft);
+					g.drawRegion(imgBomb2, 0, 0, w.width, w.height, 0, tempX, tempY, TopLeft);
 				}else if(id==102){
-					g.drawRegion(imgBomb3, 0, 0, 17, 17, 0, tempX, tempY, TopLeft);
+					g.drawRegion(imgBomb3, 0, 0, w.width, w.height, 0, tempX, tempY, TopLeft);
 				}
-				if((tempY+w.height) > 530){
+				if(tempY > 530){
 					dartles.removeElement(w);
 				}
 			}
@@ -362,7 +368,7 @@ public class Weapon implements Common {
 				}
 				protectFlag=0;
 			}
-			g.drawRegion(imgProtect, protectIndex*w.width, 0, w.width, w.height, 0, own.mapx, own.mapy-35, TopLeft);
+			g.drawRegion(imgProtect, protectIndex*w.width, 0, w.width, w.height, 0, own.mapx-20, own.mapy-65, TopLeft);
 			if(protectIndex==2){
 				SubmarineGameEngine.pFlag=-1;//能量保护结束
 				SubmarineGameEngine.protectionFlag=false;
@@ -372,7 +378,7 @@ public class Weapon implements Common {
 	}
 	/*没被攻击时的能量保护*/
 	public void showEnergyProtection2(SGraphics g, Role own){
-		g.drawRegion(imgProtect, 0, 0, 92, 91, 0, own.mapx, own.mapy-35, TopLeft);
+		g.drawRegion(imgProtect, 0, 0, imgProtect.getWidth()/3, imgProtect.getHeight(), 0, own.mapx-20, own.mapy-65, TopLeft);
 	}
 	
 	/*BOSS技能--呼叫空投*/
@@ -412,9 +418,9 @@ public class Weapon implements Common {
 					airDropIndex2=(airDropIndex2+1)%3;
 					airDropFlag2=0;
 				}
-			}
-			if(w.mapy >= 530){
-				airDrops.removeElement(w);
+				if((tempY+w.height) <= 0){
+					airDrops.removeElement(w);
+				}
 			}
 		}
 		g.setClip(0, 0, screenW, screenH);
@@ -449,7 +455,7 @@ public class Weapon implements Common {
 			if(w.direction == 3){
 				int tempX = w.mapx;
 				int tempY = w.mapy-w.speedY;
-				if(tempY<=100){
+				if(tempY<=120){
 					tempY=w.mapy;
 					w.endTime = System.currentTimeMillis()/1000;
 					//System.out.println("torpedoTime2-torpedoTime: "+(w.endTime-w.startTime));
@@ -471,7 +477,8 @@ public class Weapon implements Common {
 					}
 				}
 				w.mapy = tempY;
-				g.drawRegion(imgTorpedo, 0, 0, 23, 14, 0, tempX, tempY, TopLeft);
+				int w2 = imgTorpedo.getWidth(), h2 = imgTorpedo.getHeight();
+				g.drawRegion(imgTorpedo, 0, 0, w2, h2, 0, tempX, tempY, TopLeft);
 			}
 		}
 	}
@@ -510,7 +517,7 @@ public class Weapon implements Common {
 			if(w.direction == 3){
 				int tempX = w.mapx;
 				int tempY = w.mapy-w.speedY;
-				if(tempY<=100){
+				if(tempY<=120){
 					if(!w.isSingle){
 						nets.removeElement(w);
 					}else{
@@ -539,7 +546,8 @@ public class Weapon implements Common {
 				}
 				w.mapy = tempY;
 				w.mapx = tempX;
-				g.drawRegion(imgNet, netIndex*9, 0, 9, 27, 0, tempX, tempY, TopLeft);
+				int w2 = imgNet.getWidth()/3, h2 = imgNet.getHeight();
+				g.drawRegion(imgNet, netIndex*w2, 0, w2, h2, 0, tempX, tempY, TopLeft);
 				if(netFlag==0){
 					netFlag++;
 				}else{
@@ -553,7 +561,7 @@ public class Weapon implements Common {
 	public void showNetLocation(SGraphics g, Role own){
 		SubmarineGameEngine.netTime2 = System.currentTimeMillis()/1000;
 		if((SubmarineGameEngine.netTime2-SubmarineGameEngine.netTime)<=3){
-			g.drawImage(imgNet2, own.mapx, own.mapy, TopLeft);
+			g.drawImage(imgNet2, own.mapx-20, own.mapy, TopLeft);
 			SubmarineGameEngine.isMove=false;
 		}else{
 			SubmarineGameEngine.isMove=true;
@@ -562,11 +570,14 @@ public class Weapon implements Common {
 	
 	/*显示呼叫空投位置*/
 	public void showAirDropLocation(SGraphics g){
-		g.drawRegion(imgAirDrop2, airDropIndex*40, 0, 40, 40, 0, 100, 85, TopLeft);
-		g.drawRegion(imgAirDrop2, airDropIndex*40, 0, 40, 40, 0, 180, 85, TopLeft);
-		g.drawRegion(imgAirDrop2, airDropIndex*40, 0, 40, 40, 0, 260, 85, TopLeft);
-		g.drawRegion(imgAirDrop2, airDropIndex*40, 0, 40, 40, 0, 340, 85, TopLeft);
-		g.drawRegion(imgAirDrop2, airDropIndex*40, 0, 40, 40, 0, 420, 85, TopLeft);
+		int w = imgAirDrop2.getWidth()/3, h = imgAirDrop2.getHeight(), x = 100, y = 110, sp = 110;
+		g.drawRegion(imgAirDrop2, airDropIndex*w, 0, w, h, 0, x, y, TopLeft);
+		g.drawRegion(imgAirDrop2, airDropIndex*w, 0, w, h, 0, x+sp, y, TopLeft);
+		g.drawRegion(imgAirDrop2, airDropIndex*w, 0, w, h, 0, x+sp*2, y, TopLeft);
+		g.drawRegion(imgAirDrop2, airDropIndex*w, 0, w, h, 0, x+sp*3, y, TopLeft);
+		g.drawRegion(imgAirDrop2, airDropIndex*w, 0, w, h, 0, x+sp*4, y, TopLeft);
+		g.drawRegion(imgAirDrop2, airDropIndex*w, 0, w, h, 0, x+sp*5, y, TopLeft);
+		g.drawRegion(imgAirDrop2, airDropIndex*w, 0, w, h, 0, x+sp*6, y, TopLeft);
 		
 		if(airDropFlag==0){
 			airDropFlag++;

@@ -46,29 +46,29 @@ public class CreateRole implements Common {
     /*own属性 */
     public static int[][] ownPara = {
 	  /*0-图片宽,1-图片高,2-生命值,3-移动速度,4-横坐标,5-纵坐标,6-伤害*/
-   	  {90, 34, 60, 10, 185, 85, 100},
-	  {90, 34, 100, 13, 185, 85, 120},
-	  {90, 34, 60, 16, 185, 85, 200}
+   	  {123, 45, 60, 10, 375, 100, 100},
+	  {123, 45, 100, 13, 375, 100, 120},
+	  {123, 45, 60, 16, 375, 100, 200}
     };
 	
    /*npc属性*/
     public static int npcPara[][] = {
 	  /*0-图片宽度,1-图片高度,2-NPC移动速度,3-提供的积分, 4-血量*/
-	  {85, 28, 8, 80, 80},  	 //yellow
-	  {85, 28, 10, 100, 100},	 //red
-	  {85, 28, 10, 100, 100},	 //blue
-	  {85, 28, 12, 220, 220},	 //black
-	  {85, 28, 15, 180, 180},	 //gray
+	  {137, 45, 8+3, 80, 80},  	 //yellow
+	  {137, 45, 10+3, 100, 100},	 //red
+	  {137, 45, 10+3, 100, 100},	 //blue
+	  {137, 45, 12+3, 220, 220},	 //black
+	  {137, 45, 15+3, 180, 180},	 //gray
     };
     
 	/*BOOS属性 (boss ID 31-40)*/
     public static int bossPara[][] = {
     	/*0-图片宽度,1-图片高度,2-血量,3-攻击力,4-移动速度,5-发射子弹的频率, 6-提供的积分, 7-停止时间*/
-    	{88, 34, 2000, 30, 6, 25, 1000, 60},
-    	{87, 44, 2500, 35, 4, 25, 1500, 50},
-    	{95, 32, 3000, 40, 6, 20, 2500, 50},
-    	{89, 40, 3500, 45, 8, 20, 3500, 40},
-    	{140, 53, 4000, 50, 6, 15, 5000, 40},
+    	{176, 68, 2000, 30, 6, 25, 1000, 60},
+    	{174, 88, 2500, 35, 4, 25, 1500, 50},
+    	{190, 64, 3000, 40, 6, 20, 2500, 50},
+    	{178, 80, 3500, 45, 8, 20, 3500, 40},
+    	{280, 106, 4000, 50, 6, 15, 5000, 40},
     };
     
 	/*创建用户舰艇*/
@@ -170,7 +170,7 @@ public class CreateRole implements Common {
 			npc.direction = RandomValue.getRandInt(2);
 			npc.width = npcPara[npc.id-1][0];
 			npc.height = npcPara[npc.id-1][1];
-			npc.mapy = RandomValue.getRandInt(0,200) + 200;
+			npc.mapy = RandomValue.getRandInt(0,290) + 220;
 			npc.speed = npcPara[npc.id-1][2] + currLevel+difficultLevel*3;
 			npc.scores = npcPara[npc.id-1][3]+difficultLevel*100;
 			npc.nonceLife = npcPara[npc.id-1][4]+difficultLevel*20;
@@ -216,7 +216,7 @@ public class CreateRole implements Common {
 			/*黄色潜艇*/
 			g.setClip(0, 0, gameMapX, gameMapY);
 			if(npc.id==1){
-				g.drawRegion(imgYellow, 0, 0, 85, 28, npc.direction == 0 ? 0 : Sprite.TRANS_MIRROR, tempx, tempy, TopLeft);
+				g.drawRegion(imgYellow, 0, 0, npcPara[npc.id-1][0], npcPara[npc.id-1][1], npc.direction == 0 ? 0 : Sprite.TRANS_MIRROR, tempx, tempy, TopLeft);
 				if((tempx + npcPara[npc.id-1][0] < 0) && npc.direction == 0){
 					npcs.removeElement(npc);
 					amount--;
@@ -332,16 +332,16 @@ public class CreateRole implements Common {
 		
 			/*雷达区域中的npc*/
 			Role role = npc.role; 
-			temp1 = parseFloat(npc.mapx+150)/5;
+			temp1 = parseFloat(npc.mapx+300)/5;
 			role.mapx = (int) temp1;
 			role.direction = npc.direction;
 			int color = returnColor(npc.id);
-			if((role.mapx+495)<634 && (role.mapx+495)>495){
+			if((role.mapx+(gameMapX+25))<(gameMapX+280) && (role.mapx+(gameMapX+25))>(gameMapX+25)){
 				g.setColor(color);
 				if(role.direction==0){
-					g.fillRect(role.mapx+480, yaxis(npc.mapy)+48, 5, 5);
+					g.fillRect(role.mapx+gameMapX, yaxis(npc.mapy)+74, 8, 8);
 				}else{
-					g.fillRect(role.mapx+495, yaxis(npc.mapy)+48, 5, 5);
+					g.fillRect(role.mapx+gameMapX+25, yaxis(npc.mapy)+74, 8, 8);
 				}
 			}
 		}
@@ -371,7 +371,7 @@ public class CreateRole implements Common {
 		//boss.mapx = 300;
 		//boss.mapy = 530;
 		boss.mapx=-100;
-		boss.mapy=410;
+		boss.mapy=485;
 		boss.direction = RandomValue.getRandInt(2);
 		boss.width = bossPara[gateId-1][0];
 		boss.height = bossPara[gateId-1][1];
@@ -482,9 +482,9 @@ public class CreateRole implements Common {
 				}else{
 					int x = 100;
 					int y = 530;
-					for(int i=0;i<5;i++){
+					for(int i=0;i<7;i++){
 						weapon.createBossSkill(boss.id, x, y, 3);
-						x += 80;
+						x += 80+30;
 					}
 					kongtouTime = System.currentTimeMillis()/1000;
 					Weapon.isAirDrop=false;
@@ -533,21 +533,21 @@ public class CreateRole implements Common {
 			if((shuileiTime2-shuileiTime>(30-difficultLevel*5) && (gateId==3 || gateId==5 || gateId==4))
 					|| (shuileiTime2-shuileiTime>30 && difficultLevel==2 && gateId ==1)
 					|| (shuileiTime2-shuileiTime>30 && difficultLevel==1 && gateId ==2)){
-				int m = 10;
+				int m = 100;
 				int n = boss.mapy;
-				for(int i=0;i<4;i++){
+				for(int i=0;i<5;i++){
 					weapon.createTorpedo(boss.id, m, n, 3);
-					m += 140;
+					m += 140+30;
 				}
 				shuileiTime = System.currentTimeMillis()/1000;
 			}
 			/*全屏网*/
 			if(wangTime2-wangTime>15 && (gateId==2 || gateId==5)){
-				int m = 50;
+				int m = 40;
 				int n = boss.mapy;
-				for(int i=0;i<4;i++){
+				for(int i=0;i<6;i++){
 					weapon.createNet(own, boss.id, m, n, 3, false);
-					m += 120;
+					m += 140+30;
 				}
 				wangTime = System.currentTimeMillis()/1000;
 			}
@@ -566,7 +566,7 @@ public class CreateRole implements Common {
 	private void drawNonceLife(SGraphics g, Role role, int gateId, int difficultLevel){
 		g.drawRegion(imgLife, 0, 0, imgLife.getWidth(), imgLife.getHeight(), 0, role.mapx+8, role.mapy-10, TopLeft);
 		g.setColor(255, 0, 0);
-		g.fillRect(role.mapx+8, role.mapy+1-10, role.nonceLife*75/(bossPara[gateId-1][2]+difficultLevel*1500), 5);
+		g.fillRect(role.mapx+5, role.mapy+1-10, role.nonceLife*170/(bossPara[gateId-1][2]+difficultLevel*1500), 8);
 	}
 	
 	/*加载图片*/

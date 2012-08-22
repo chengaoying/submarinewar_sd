@@ -40,8 +40,8 @@ public class DrawGame implements Common{
 	private int ran, ran2, flag, index, warnFlag, warnIndex, textFlag, textIndex, fireFlag, fireIndex,fireFlag2, fireIndex2,fireFlag3, fireIndex3,fireFlag4, fireIndex4;
 	private int mapx1,mapy1, mapx2,mapy2,mapx3,mapy3,mapx4,mapy4, fireCount;
 	private int[][] coordinate ={
-			{20,150,250,300},
-			{300,200,150,30},
+			{150,450,750,950},
+			{600,300,150,50},
 	};
 	
 	private int para[][] = {
@@ -90,6 +90,8 @@ public class DrawGame implements Common{
 	public static int totalnums[] = {20,30,35,40,40};
 	public static String msg = ""; 
 	public static long msgTime,msgTime2;
+	private int fontSize = 40;
+	
 	/*主菜单*/
 	public void drawMainMenu(SGraphics g, int index, int favorIndex){
 		if(imgBg == null){
@@ -149,9 +151,9 @@ public class DrawGame implements Common{
 				e.printStackTrace();
 			}
 		}
-		g.drawRegion(imgMenu, 0, 0, 202, 192, 0, 150, 165, TopLeft);
+		g.drawRegion(imgMenu, 0, 0, imgMenu.getWidth(), imgMenu.getHeight(), 0, 287, 180, TopLeft);
 		//g.drawRegion(imgSelect2, 0, 0, 160, 55, 0, 172, 176+index*56, TopLeft);
-		DrawUtil.drawRect(g, 172, 175+index*58, 158, 53, 2, 0XFFFF00);
+		DrawUtil.drawRect(g, 330, 200+index*106, 284, 95, 4, 0XFFFF00);
 	}
 
 	/*没有游戏记录时提示*/
@@ -188,7 +190,7 @@ public class DrawGame implements Common{
 		}
 	}*/
 	/*游戏地图*/
-	int x1=150, x2=433, x3=403;
+	int x1=150, x2=433, x3=800;
 	private void drawMap(SGraphics g, int r) {
 		/*KeyState keyState = engine.getKeyState();
 		engine.addDebugUserMessage(getKeyCodeStr(keyState.getCurrentKeyCode())+" M:"+keyState.hasPersistMoveEvent()
@@ -245,46 +247,47 @@ public class DrawGame implements Common{
 			if(iceFlag2<2){
 				iceFlag2++;
 			}else{
-				iceIndex2=(iceIndex2+1)%(_mapx+150);
+				iceIndex2=(iceIndex2+1)%_mapx;
 				iceFlag2=0;
 			}
-			int h = 135, h2 = 480+65, w = 915;
-			if(mapIndex<=160){
-				g.drawRegion(imgMapUp, mapIndex, 0, w, h, 0, 0, 0, TopLeft);
+			int h = 135, h2 = 480+65;
+			if(mapIndex<=300){
+				g.drawRegion(imgMapUp, mapIndex, 0, gameMapX, h, 0, 0, 0, TopLeft);
 			}else{
 				g.drawRegion(imgMapUp, mapIndex, 0, _mapx-mapIndex, h, 0, 0, 0, TopLeft);
-				g.drawRegion(imgMapUp, 0, 0, w-(_mapx-mapIndex), h, 0, _mapx-mapIndex, 0, TopLeft);
+				g.drawRegion(imgMapUp, 0, 0, gameMapX-(_mapx-mapIndex), h, 0, _mapx-mapIndex, 0, TopLeft);
 			}
-			if(mapIndex2<=160){
-				g.drawRegion(imgMapCenter, mapIndex2, 0, w, h2, 0, 0, h, TopLeft);
+			if(mapIndex2<=300){
+				g.drawRegion(imgMapCenter, mapIndex2, 0, gameMapX, h2, 0, 0, h, TopLeft);
 			}else{
 				g.drawRegion(imgMapCenter, mapIndex2, 0, _mapx-mapIndex2, h2, 0, 0, h, TopLeft);
-				g.drawRegion(imgMapCenter, 0, 0, w-(_mapx-mapIndex2), h2, 0, _mapx-mapIndex2, h, TopLeft);
+				g.drawRegion(imgMapCenter, 0, 0, gameMapX-(_mapx-mapIndex2), h2, 0, _mapx-mapIndex2, h, TopLeft);
 			}
-			if((x1-iceIndex+221)<=0){
+			if((x1-iceIndex+imgIceBerg.getWidth())<=0){
 				iceIndex=0;
-				x1=479;
+				x1=gameMapX;
 				ran = RandomValue.getRandInt(2);
 			}
-			if((x3-iceIndex2+273)<=0){
+			if((x3-iceIndex2+imgIceBerg2.getWidth())<=0){
 				iceIndex2=0;
-				x3=479;
+				x3=gameMapX;
 				ran2 = RandomValue.getRandInt(2);
 			}
-			if((x2-boatIndex+94)<=0){
+			if((x2-boatIndex+imgBoat.getWidth())<=0){
 				boatIndex=0;
-				x2=479;
+				x2=gameMapX;
 			}
+			int iceY = 80;
 			if(ran==0){
-				g.drawRegion(imgIceBerg, 0, 0, imgIceBerg.getWidth(), imgIceBerg.getHeight(), 0, x1-iceIndex, 74, TopLeft);
+				g.drawRegion(imgIceBerg, 0, 0, imgIceBerg.getWidth(), imgIceBerg.getHeight(), 0, x1-iceIndex, iceY, TopLeft);
 			}
 			if(ran2==0){
-				g.drawRegion(imgIceBerg2, 0, 0, imgIceBerg2.getWidth(), imgIceBerg2.getHeight(), 0, x3-iceIndex2, 70, TopLeft);
+				g.drawRegion(imgIceBerg2, 0, 0, imgIceBerg2.getWidth(), imgIceBerg2.getHeight(), 0, x3-iceIndex2, iceY+3, TopLeft);
 			}
-			g.drawRegion(imgBoat, 0, 0, imgBoat.getWidth(), imgBoat.getHeight(), 0, x2-boatIndex, 390, TopLeft);
+			g.drawRegion(imgBoat, 0, 0, imgBoat.getWidth(), imgBoat.getHeight(), 0, x2-boatIndex, 437, TopLeft);
 			
-			g.drawImage(imgMapDown, 0, 615, TopLeft);
-			g.drawImage(imgMapRight, 910, 0, TopLeft);
+			g.drawImage(imgMapDown, 0, gameMapY, TopLeft);
+			g.drawImage(imgMapRight, gameMapX, 0, TopLeft);
 			
 			/*BOSS出现前的警告*/
 			if((SubmarineGameEngine.warnEndTime-SubmarineGameEngine.warnStartTime)<3/* && !SubmarineGameEngine.isBoss5War*/){
@@ -295,10 +298,11 @@ public class DrawGame implements Common{
 					warnFlag=0;
 				}
 				g.setColor(0);
-				g.fillRect(0, 125, 907, 60);
+				g.fillRect(0, 180, gameMapX, 80);
 				//g.drawRegion(imgWarning, imgWarning.getWidth()/3*warnIndex, 0, imgWarning.getWidth()/3, imgWarning.getHeight(), 0, 150, 130, TopLeft);
 				if(warnFlag==1){
-					g.drawImage(imgWarning, 200, 130, TopLeft);
+					int x = gameMapX/2-imgWarning.getWidth()/2;
+					g.drawImage(imgWarning, x, 185, TopLeft);
 				}
 			}
 			
@@ -361,15 +365,15 @@ public class DrawGame implements Common{
 		
 		if(down){
 			if(confirm==0){
-				DrawUtil.drawRect(g, 562, 507, 198, 77, 2, 0XFFFF00);
+				DrawUtil.drawRect(g, 562, 507, 198, 77, 4, 0XFFFF00);
 			}else{
-				DrawUtil.drawRect(g, 880, 507, 198, 77, 2, 0XFFFF00);
+				DrawUtil.drawRect(g, 880, 507, 198, 77, 4, 0XFFFF00);
 			}
 		}else{
 			if(index2==0){
-				DrawUtil.drawRect(g, 475, 322, 65, 115, 2, 0XFFFF00);
+				DrawUtil.drawRect(g, 475, 322, 65, 115, 4, 0XFFFF00);
 			}else{
-				DrawUtil.drawRect(g, 1100, 322, 65, 115, 2, 0XFFFF00);
+				DrawUtil.drawRect(g, 1100, 322, 65, 115, 4, 0XFFFF00);
 			}
 		}
 		g.drawRegion(imgConfirm, 0, imgConfirm.getHeight()/2, imgConfirm.getWidth(), imgConfirm.getHeight()/2, 
@@ -392,7 +396,7 @@ public class DrawGame implements Common{
 	
 		/*舰艇信息*/
 		g.setColor(28, 213, 233);
-		engine.setFont(40);
+		engine.setFont(fontSize);
 		
 		int x = 90, x2 = 230, y = 137, y2 = 350, sp = 40;
 		g.drawString(str[id-100][0], x, y, TopLeft);
@@ -456,12 +460,12 @@ public class DrawGame implements Common{
 	public void drawInfo(SGraphics g, Role own, int limitLife, int level, Propety propety){
 		/*血量*/
 		//int currBoold = (own.nonceLife*90)/CreateRole.ownPara[own.id-100][2];
-		int currBoold = own.nonceLife*90/limitLife;
+		int currBoold = own.nonceLife*140/limitLife;
 		if(imgBlood==null || imgBlood2 ==null || imgGk == null || imgMedal==null
 				|| imgRules==null || imgLifeNums==null){
 			try {
 				imgBlood = Image.createImage("/blood.png");
-				imgBlood2 = Image.createImage("/blood2.jpg");
+				imgBlood2 = Image.createImage("/blood2.png");
 				imgGk = Image.createImage("/gk.jpg");
 				imgMedal = Image.createImage("/medal.png");
 				imgRules = Image.createImage("/rules.jpg");
@@ -470,60 +474,58 @@ public class DrawGame implements Common{
 				e.printStackTrace();
 			}
 		}
-		if(currBoold>=10){
-			g.drawRegion(imgBlood, 0, 0, 10, 16, 0, 60, 500, TopLeft);
+		int y = 632, h = imgBlood.getHeight(), w = imgBlood.getWidth()/3;
+		if(currBoold>=20){
+			g.drawRegion(imgBlood, 0, 0, w, h, 0, 113, y, TopLeft);
 		}
 		if(currBoold>20){
-			g.drawRegion(imgBlood2, 0, 0, currBoold-20, 16, 0, 68, 500, TopLeft);
+			g.drawRegion(imgBlood2, 0, 0, currBoold-w, h, 0, 113+w-2, y, TopLeft);
 		}
-		if(currBoold==90){
-			g.drawRegion(imgBlood, 20, 0, 10, 16, 0, 137, 500, TopLeft);
+		if(currBoold==140){
+			g.drawRegion(imgBlood, w*2, 0, w, h, 0, (113+w-4)+(currBoold-w), y, TopLeft);
 		}
-		engine.setFont(24);
+		engine.setFont(fontSize);
 		g.setColor(255, 255, 255);
 		/*关卡*/
-		g.drawRegion(imgGk, 25*(level-1), 0, 25, 28, 0, 585, 13, TopLeft);
+		int _y = 632;
+		g.drawRegion(imgGk, (imgGk.getWidth()/5)*(level-1), 0, (imgGk.getWidth()/5), imgGk.getHeight(), 0, 1111, 17, TopLeft);
 		/*当前血量*/
-		drawNum(g, own.nonceLife, 92, 498);
+		drawNum(g, own.nonceLife, 163, _y);
 		//g.drawString(String.valueOf(own.nonceLife)+"/"+String.valueOf(limitLife), 85, 498, TopLeft);
 		/*得分和击落数量*/
-		drawNum(g, own.scores, 230, 498);
-		drawNum(g, own.eatCount2, 403, 498);
+		drawNum(g, own.scores, 425, _y);
+		drawNum(g, own.eatCount2, 740, _y);
 		for(int i=0;i<own.lifeNum;i++){
-			g.drawImage(imgLifeNums, i*imgLifeNums.getWidth(), 0, TopLeft);
+			g.drawImage(imgLifeNums, i*(imgLifeNums.getWidth()+5)+10, 0+10, TopLeft);
 		}
 		
 		/*道具数量*/
 		g.setColor(255, 255, 255);
-		engine.setFont(15);
-		/*TextView.showSingleLineText(g, String.valueOf(propety.energyPropNum), 498, 260, 18, 16, 1);
-		TextView.showSingleLineText(g, String.valueOf(propety.hidePropNum), 565, 260, 18, 16, 1);
-		TextView.showSingleLineText(g, String.valueOf(propety.slowPropNum), 498, 326, 18, 16, 1);
-		TextView.showSingleLineText(g, String.valueOf(propety.airDropPropNum), 565, 326, 18, 16, 1);
-		TextView.showSingleLineText(g, String.valueOf(propety.dartlePropNum), 498, 391, 18, 16, 1);
-		TextView.showSingleLineText(g, String.valueOf(propety.laserPropNum), 565, 391, 18, 16, 1);
-		TextView.showSingleLineText(g, String.valueOf(propety.medigelPropNum), 498, 456, 18, 16, 1);
-		TextView.showSingleLineText(g, String.valueOf(propety.limitBooldPropNum), 565, 456, 18, 16, 1);*/
+		engine.setFont(fontSize);
+		int _h = 30, _w = 30, x_ = 936, y_ = 379, xsp = 85, ysp = 84;
 		
-		TextView.showSingleLineText(g, String.valueOf(propety.energyPropNum), 494, 260, 24, 16, 1);
-		TextView.showSingleLineText(g, String.valueOf(propety.hidePropNum), 561, 260, 24, 16, 1);
-		TextView.showSingleLineText(g, String.valueOf(propety.slowPropNum), 494, 326, 24, 16, 1);
-		TextView.showSingleLineText(g, String.valueOf(propety.airDropPropNum), 561, 326, 24, 16, 1);
-		TextView.showSingleLineText(g, String.valueOf(propety.dartlePropNum), 494, 391, 24, 16, 1);
-		TextView.showSingleLineText(g, String.valueOf(propety.laserPropNum), 561, 391, 24, 16, 1);
-		TextView.showSingleLineText(g, String.valueOf(propety.medigelPropNum), 494, 456, 24, 16, 1);
-		TextView.showSingleLineText(g, String.valueOf(propety.limitBooldPropNum), 561, 456, 24, 16, 1);
+		TextView.showSingleLineText(g, String.valueOf(propety.energyPropNum), x_, y_, _w, _h, 1);
+		TextView.showSingleLineText(g, String.valueOf(propety.hidePropNum), x_+xsp, y_, _w, _h, 1);
+		TextView.showSingleLineText(g, String.valueOf(propety.slowPropNum), x_+xsp*2, y_, _w, _h, 1);
+		
+		TextView.showSingleLineText(g, String.valueOf(propety.airDropPropNum), x_, y_+ysp, _w, _h, 1);
+		TextView.showSingleLineText(g, String.valueOf(propety.dartlePropNum), x_+xsp, y_+ysp, _w, _h, 1);
+		TextView.showSingleLineText(g, String.valueOf(propety.laserPropNum), x_+xsp*2, y_+ysp, _w, _h, 1);
+		
+		TextView.showSingleLineText(g, String.valueOf(propety.medigelPropNum), x_, y_+ysp*2, _w, _h, 1);
+		TextView.showSingleLineText(g, String.valueOf(propety.limitBooldPropNum), x_+xsp, y_+ysp*2, _w, _h, 1);
 		/*画勋章*/
-		drawMedal(g, 500, 187);
+		drawMedal(g, 928, 270);
 		/*提示信息*/
 		if(!msg.equals("") && msgTime2-msgTime<3){
 			int color = g.getColor();
 			g.setColor(0xffffff);
-			engine.setFont(19);
-			Font currFont = engine.getFont();//Font.getFont(Font.FACE_MONOSPACE, Font.STYLE_PLAIN, Font.SIZE_LARGE);
-			int x = 100+imgRules.getWidth()/2 - currFont.stringWidth(msg)/2;
-			g.drawImage(imgRules, 100, 195, TopLeft);
-			g.drawString(msg, x, 200, TopLeft);
+			engine.setFont(fontSize);
+			Font currFont = engine.getFont();
+			int x2 = gameMapX/2-imgRules.getWidth()/2, y2 = gameMapY/2-imgRules.getHeight()/2;
+			int x1 = x2 + (imgRules.getWidth()/2 - currFont.stringWidth(msg)/2);
+			g.drawImage(imgRules, x2, y2, TopLeft);
+			g.drawString(msg, x1, y2+5, TopLeft);
 			g.setColor(color);
 		}
 		engine.setDefaultFont();
@@ -624,25 +626,27 @@ public class DrawGame implements Common{
 		String str = "";
 		g.drawImage(imgMain3, 0, 0, TopLeft);
 		if(passState==-1){
-			g.drawRegion(imgGameInfo, 0, 0, imgGameInfo.getWidth(), imgGameInfo.getHeight(), 0, 85, 140, TopLeft);
-			g.drawImage(imgOver, 266, 158, TopLeft);
-			g.drawRegion(imgPassSelect, index*193, 0, 193, 46, 0, 91, 420, TopLeft);
-			g.drawRegion(imgPassSelect, (index==0?1:0)*193, 92, 193, 46, 0, 350, 420, TopLeft);
+			g.drawRegion(imgGameInfo, 0, 0, imgGameInfo.getWidth(), imgGameInfo.getHeight(), 0, 200, 70, TopLeft);
+			g.drawImage(imgOver, 470, 106, TopLeft);
+			int w = imgPassSelect.getWidth()/2, h = imgPassSelect.getHeight()/3;
+			g.drawRegion(imgPassSelect, index*w, 0, w, h, 0, 210, 555, TopLeft);
+			g.drawRegion(imgPassSelect, (index==0?1:0)*w, h*2, w, h, 0, 680, 555, TopLeft);
 			info(g, level, own, str);
 		}else{
 			if(passState==0){
-				g.drawRegion(imgGameInfo, 0, 0, imgGameInfo.getWidth(), imgGameInfo.getHeight(), 0, 85, 140, TopLeft);
-				g.drawImage(imgPass, 286, 158, TopLeft);
+				g.drawRegion(imgGameInfo, 0, 0, imgGameInfo.getWidth(), imgGameInfo.getHeight(), 0, 200, 70, TopLeft);
+				g.drawImage(imgPass, 520, 106, TopLeft);
 				str="按确认键进入下一关!";
 				info(g, level, own, str);
 			}else{
 				//str="按确认键进入排行榜查看排名!";
-				g.drawImage(imgPassBg, 175, tempY, TopLeft);
-				if(tempY<=180){
-					tempY += 35;
+				g.drawImage(imgPassBg, 320, tempY, TopLeft);
+				if(tempY<=90){
+					tempY += 25;
 				}else{
-					g.drawRegion(imgPassText, 543*5, 0, 543, 175, 0, 50, 235, TopLeft);
-					g.drawRegion(imgPassText, textIndex*543, 0, 543, 175, 0, 50, 235, TopLeft);
+					int w = imgPassText.getWidth()/6, h = imgPassText.getHeight();
+					g.drawRegion(imgPassText, w*5, 0, w, h, 0, 358, 302, TopLeft);
+					g.drawRegion(imgPassText, textIndex*w, 0, w, h, 0, 358, 302, TopLeft);
 					if(textIndex<5){
 						if(textFlag<=3){
 							textFlag++;
@@ -651,6 +655,7 @@ public class DrawGame implements Common{
 							textFlag=0;
 						}
 					}else if(fireCount<=2){
+						int fireW = imgPassFireWork.getWidth()/4, fireH = imgPassFireWork.getHeight();
 						if(fireFlag<=2){
 							fireFlag++;
 						}else{
@@ -681,7 +686,7 @@ public class DrawGame implements Common{
 									mapy2 = coordinate[1][RandomValue.getRandInt(0, 4)];
 								}
 							}
-							g.drawRegion(imgPassFireWork, fireIndex2*341, 0, 341, 354, 0, mapx2, mapy2, TopLeft);
+							g.drawRegion(imgPassFireWork, fireIndex2*fireW, 0, fireW, fireH, 0, mapx2, mapy2, TopLeft);
 						}
 						if(isFire3){
 							if(fireFlag3<=2){
@@ -695,7 +700,7 @@ public class DrawGame implements Common{
 									mapy3 = coordinate[1][RandomValue.getRandInt(0, 4)];
 								}
 							}
-							g.drawRegion(imgPassFireWork, fireIndex3*341, 0, 341, 354, 0, mapx3, mapy3, TopLeft);
+							g.drawRegion(imgPassFireWork, fireIndex3*fireW, 0, fireW, fireH, 0, mapx3, mapy3, TopLeft);
 						}
 						if(isFire4){
 							if(fireFlag4<=2){
@@ -709,17 +714,18 @@ public class DrawGame implements Common{
 									mapy4 = coordinate[1][RandomValue.getRandInt(0, 4)];
 								}
 							}
-							g.drawRegion(imgPassFireWork, fireIndex4*341, 0, 341, 354, 0, mapx4, mapy4, TopLeft);
+							g.drawRegion(imgPassFireWork, fireIndex4*fireW, 0, fireW, fireH, 0, mapx4, mapy4, TopLeft);
 						}
-						g.drawRegion(imgPassFireWork, fireIndex*341, 0, 341, 354, 0, mapx1, mapy1, TopLeft);
+						g.drawRegion(imgPassFireWork, fireIndex*fireW, 0, fireW, fireH, 0, mapx1, mapy1, TopLeft);
 					}else{
 						isFireOver = true; //烟花结束
+						int w2 = imgPassSelect.getWidth()/2, h2 = imgPassSelect.getHeight()/3;
 						if(difficultLevel==2){ //没有下一个难度则提示重新开始游戏
-							g.drawRegion(imgPassSelect, index*193, 0, 193, 46, 0, 91, 420, TopLeft);
+							g.drawRegion(imgPassSelect, index*w2, 0, w2, h2, 0, 210, 555, TopLeft);
 						}else{
-							g.drawRegion(imgPassSelect, index*193, 46, 193, 46, 0, 91, 420, TopLeft);
+							g.drawRegion(imgPassSelect, index*w2, h2, w2, h2, 0, 210, 555, TopLeft);
 						}
-						g.drawRegion(imgPassSelect, (index==0?1:0)*193, 92, 193, 46, 0, 350, 420, TopLeft);
+						g.drawRegion(imgPassSelect, (index==0?1:0)*w2, h2*2, w2, h2, 0, 680, 555, TopLeft);
 					}
 				}
 			}
@@ -729,28 +735,28 @@ public class DrawGame implements Common{
 	private void info(SGraphics g, int level, Role own, String str){
 		g.setColor(255, 255, 255);
 		Font largeFont = Font.getFont(Font.FACE_MONOSPACE, Font.STYLE_PLAIN, Font.SIZE_LARGE);
-		engine.setFont(19);
+		engine.setFont(fontSize);
 		int x = screenW/2-largeFont.stringWidth(str)/2;
 		g.drawString(str, x, 482, TopLeft);
-		
 		g.setColor(28, 213, 233);
-		g.drawString(String.valueOf(level), 300, 208, TopLeft);
-		g.drawString(String.valueOf(own.scores), 300, 238, TopLeft);
-		g.drawString(String.valueOf(own.eatCount), 300, 268, TopLeft);
-		g.drawString(String.valueOf(own.harm), 300, 298, TopLeft);
+		int _x = 500, _y = 190, sp = 50;
+		g.drawString(String.valueOf(level), _x, _y, TopLeft);
+		g.drawString(String.valueOf(own.scores), _x, _y+sp, TopLeft);
+		g.drawString(String.valueOf(own.eatCount), _x, _y+sp*2, TopLeft);
+		g.drawString(String.valueOf(own.harm), _x, _y+sp*3, TopLeft);
 		String str2 = String.valueOf(((Weapon.hitNumber/Weapon.bombAmount)*100));
 		//System.out.println("str2:"+str2);
 		if(str2.equalsIgnoreCase("nan")){
 			str2="0";
 		}
 		if(str2.length()>2){
-			g.drawSubstring(str2, 0, 2, 300, 328, TopLeft);
+			g.drawSubstring(str2, 0, 2, _x, _y+sp*4, TopLeft);
 		}else{
-			g.drawSubstring(str2, 0, str2.length(), 300, 328, TopLeft);
+			g.drawSubstring(str2, 0, str2.length(), _x, _y+sp*4, TopLeft);
 		}
-		g.drawString("%", 320, 328, TopLeft);
+		g.drawString("%", _x+40, _y+sp*4, TopLeft);
 		//画勋章
-		drawMedal(g, 295, 358);
+		drawMedal(g, _x, _y+sp*5);
 		engine.setDefaultFont();
 	}
 	/*勋章*/
@@ -812,18 +818,18 @@ public class DrawGame implements Common{
 				e.printStackTrace();
 			}
 		}
-		engine.setFont(40);
+		engine.setFont(fontSize);
 		g.drawImage(imgShop, 0, 0, TopLeft);
 		if(shopX<2){
 			//g.drawImage(imgShopSelect, 143+shopX*220, 127+shopY*100, TopLeft);
-			DrawUtil.drawRect(g, 272+shopX*418, 158+shopY*129, 148, 48, 3, 0XFFFF00);
+			DrawUtil.drawRect(g, 272+shopX*418, 158+shopY*129, 148, 48, 4, 0XFFFF00);
 			
 			//显示描述信息
 			g.setColor(28, 213, 233);
 			TextView.showMultiLineText(g, desc[shopY][shopX], 5, 900, 120, 270, 286);
 		}else{
 			//g.drawImage(imgShopSelect2, 472, 343, TopLeft);
-			DrawUtil.drawRect(g, 896, 545, 270, 58, 3, 0XFFFF00);
+			DrawUtil.drawRect(g, 896, 545, 270, 58, 4, 0XFFFF00);
 		}
 		g.setColor(28, 213, 233);
 		//g.drawString(String.valueOf(engine.getEngineService().getBalance()), 990, 465, TopLeft);
@@ -891,7 +897,7 @@ public class DrawGame implements Common{
 		}else{
 			g.drawImage(imgPurchaseFail, 172, 201, TopLeft);
 			//g.drawImage(imgPurchaseSelect2, 185+(purchaseIndex*224), 254, TopLeft);
-			DrawUtil.drawRect(g, 185+(purchaseIndex*224), 254, 51, 30, 2, 0XFFFF00);
+			DrawUtil.drawRect(g, 185+(purchaseIndex*224), 254, 51, 30, 4, 0XFFFF00);
 		}
 	}
 	
@@ -906,7 +912,7 @@ public class DrawGame implements Common{
 		}
 		g.drawImage(imgRecharge, 0, 0, TopLeft);
 		//g.drawImage(imgRechargeSelect, 50+index*136, 210, TopLeft);
-		DrawUtil.drawRect(g, 50+index*136, 210, 77, 34, 2, 0XFFFF00);
+		DrawUtil.drawRect(g, 50+index*136, 210, 77, 34, 4, 0XFFFF00);
 	}
 	
 	/*充值状态界面*/
@@ -939,7 +945,7 @@ public class DrawGame implements Common{
 		}
 		g.drawImage(imgRanking, 0, 0, TopLeft);
 		g.setColor(190, 255, 255);
-		engine.setFont(40);
+		engine.setFont(fontSize);
 		String ownRank="榜上无名!";
 		if(gameRanking!=null){
 			sortByMedalNum(gameRanking); //排序
@@ -972,7 +978,7 @@ public class DrawGame implements Common{
 				g.drawString(scores, scoresW, y, TopLeft);
 				g.drawString(hitNum, hitNumW, y, TopLeft);*/
 				//画勋章
-				drawMedal(g, 877, 160+(i*h));
+				drawMedal(g, 900, 160+(i*h));
 			}
 		}
 		g.drawString(ownRank, 229, 638, TopLeft);

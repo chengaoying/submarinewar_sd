@@ -471,9 +471,9 @@ public class SubmarineGameEngine extends GameCanvasEngine implements Common{
 				if(propety.airDropPropNum>0 || isDebugMode()){
 					int x = 25;//own.mapx-120;
 					int y = -30;//own.mapy+own.height/2;
-					for(int i=0;i<5;i++){
+					for(int i=0;i<6;i++){
 						weapon.createParaDrop(own, x, y, 2);
-						x += own.width;
+						x += own.width+30;
 					}
 					if(!isDebugMode()){
 						propety.airDropPropNum--;
@@ -523,7 +523,8 @@ public class SubmarineGameEngine extends GameCanvasEngine implements Common{
 			keyState.remove(KeyCode.NUM6);
 			if(!okPressed){
 				if(propety.laserPropNum>0 || isDebugMode()){
-					weapon.createLaser(own.id, own.mapx, own.mapy, 2, currLevel, difficultLevel);
+					int x = own.mapx+62-146, y = own.mapy+35;
+					weapon.createLaser(own.id, x, y, 2, currLevel, difficultLevel);
 					startTime3 = System.currentTimeMillis()/1000;
 					startTime = System.currentTimeMillis()/1000;
 					okPressed = true;
