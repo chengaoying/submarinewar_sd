@@ -480,7 +480,7 @@ public class CreateRole implements Common {
 				if(!Weapon.isAirDrop){
 					weapon.showAirDropLocation(g);
 				}else{
-					int x = 100;
+					int x = 150;
 					int y = 530;
 					for(int i=0;i<7;i++){
 						weapon.createBossSkill(boss.id, x, y, 3);
@@ -533,11 +533,11 @@ public class CreateRole implements Common {
 			if((shuileiTime2-shuileiTime>(30-difficultLevel*5) && (gateId==3 || gateId==5 || gateId==4))
 					|| (shuileiTime2-shuileiTime>30 && difficultLevel==2 && gateId ==1)
 					|| (shuileiTime2-shuileiTime>30 && difficultLevel==1 && gateId ==2)){
-				int m = 100;
+				int m = 50;
 				int n = boss.mapy;
 				for(int i=0;i<5;i++){
 					weapon.createTorpedo(boss.id, m, n, 3);
-					m += 140+30;
+					m += 140+50;
 				}
 				shuileiTime = System.currentTimeMillis()/1000;
 			}

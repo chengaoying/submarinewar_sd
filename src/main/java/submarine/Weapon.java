@@ -225,8 +225,8 @@ public class Weapon implements Common {
 		for(int i=lasers.size()-1;i>=0;i--){
 			laser = (Weapon)lasers.elementAt(i);
 			if(laser.direction==2){
-				//laser.mapx=own.mapx-40;
-				//laser.mapy=own.mapy+30;
+				laser.mapx=own.mapx+62-146;
+				laser.mapy=own.mapy+35;
 				g.drawRegion(imgLaser, laserIndex*laser.width, 0, laser.width, laser.height, 0, laser.mapx, laser.mapy, TopLeft);
 				if(laserFlag==0){
 					laserFlag++;

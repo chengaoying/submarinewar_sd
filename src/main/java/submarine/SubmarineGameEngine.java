@@ -306,6 +306,8 @@ public class SubmarineGameEngine extends GameCanvasEngine implements Common{
 		g.setClip(0, 0, screenW, screenH);
 		g.setColor(0Xffffff);
 		g.drawString("加载中,请稍后...", 300, 260, TopLeft);*/
+		draw.showInit(g);
+		status = GAME_STATUS_MAIN_MENU;
 	}
 
 	private void showNoRecord(SGraphics g){
@@ -413,11 +415,11 @@ public class SubmarineGameEngine extends GameCanvasEngine implements Common{
 				status=GAME_STATUS_MAIN_MENU;
 				ServiceWrapper sw = getServiceWrapper();
 				GameRecord gr = sw.readRecord(attainmentId);
-				if(((gr==null && own.scores>0) || (gr.getScores()<=own.scores) && own.scores>0)){
+				if(((gr==null && own.scores>0) || (gr!=null && (gr.getScores()<=own.scores) && own.scores>0))){
 					gameRecord.saveGameRecord(own, boss, currLevel);
 				}
 				GameAttainment ga = sw.readAttainment(attainmentId);
-				if(((ga==null && own.scores>0) || (ga.getScores()<=own.scores) && own.scores>0)){
+				if(((ga==null && own.scores>0) || (ga!=null && (ga.getScores()<=own.scores) && own.scores>0))){
 					gameRecord.saveGameAttainment(own, boss, currLevel);
 				}
 				clearGamePlaying();
@@ -443,154 +445,172 @@ public class SubmarineGameEngine extends GameCanvasEngine implements Common{
 			if(!keyState.isDoubleClick(KeyCode.RIGHT) && !supportKeyReleased){
 				keyState.remove(KeyCode.RIGHT);
 			}
-		}*/ else if(keyState.contains(KeyCode.OK) && own.status!=1){ //普通攻击
+		}*/ else if(keyState.contains(KeyCode.OK)){ //普通攻击
 			keyState.remove(KeyCode.OK);
-			if(dartleFlag){ //连射(道具)
-				if(!okPressed){
-					weapon.createBomb(own, own.id, own.mapx, own.mapy, 2, own.width, own.height);
-					dartleTime = System.currentTimeMillis()/100;
-					Weapon.bombAmount++; //发射子弹数量
-					dFlag = true;
+			if(own.status!=1){
+				if(dartleFlag){ //连射(道具)
+					if(!okPressed){
+						weapon.createBomb(own, own.id, own.mapx, own.mapy, 2, own.width, own.height);
+						dartleTime = System.currentTimeMillis()/100;
+						Weapon.bombAmount++; //发射子弹数量
+						dFlag = true;
+						
+						startTime = System.currentTimeMillis()/1000;
+						okPressed = true;
+					}
 					
-					startTime = System.currentTimeMillis()/1000;
-					okPressed = true;
-				}
-				
-			}else{
-				if(!okPressed){ //普通攻击
-					weapon.createBomb(own, own.id, own.mapx, own.mapy, 2, own.width, own.height); 
-					Weapon.bombAmount++; //发射子弹数量
-					startTime = System.currentTimeMillis()/1000;
-					startTime2 = System.currentTimeMillis()/100;
-					okPressed = true;
+				}else{
+					if(!okPressed){ //普通攻击
+						weapon.createBomb(own, own.id, own.mapx, own.mapy, 2, own.width, own.height); 
+						Weapon.bombAmount++; //发射子弹数量
+						startTime = System.currentTimeMillis()/1000;
+						startTime2 = System.currentTimeMillis()/100;
+						okPressed = true;
+					}
 				}
 			}
-		} else if(keyState.contains(KeyCode.NUM4) && own.status!=1){  //呼叫空投(技能)
+		} else if(keyState.contains(KeyCode.NUM4)){  //呼叫空投(技能)
 			keyState.remove(KeyCode.NUM4);
-			if(!okPressed){
-				if(propety.airDropPropNum>0 || isDebugMode()){
-					int x = 25;//own.mapx-120;
-					int y = -30;//own.mapy+own.height/2;
-					for(int i=0;i<6;i++){
-						weapon.createParaDrop(own, x, y, 2);
-						x += own.width+30;
-					}
-					if(!isDebugMode()){
-						propety.airDropPropNum--;
-					}
-					startTime = System.currentTimeMillis()/1000;
-					okPressed = true;
-				}
-			}
-		} else if(keyState.contains(KeyCode.NUM5) && own.status!=1){ //连射(技能)
-			keyState.remove(KeyCode.NUM5);
-			if(!dartleFlag){
-				if(propety.dartlePropNum>0 || isDebugMode()){
-					propety.dartlePropNum--;
-					dartleFlag=true;
-				}
-			}
-		} else if(keyState.contains(KeyCode.NUM3) && own.status!=1){ //降低敌方速度(技能)
-			keyState.remove(KeyCode.NUM3);
-			if(!slowFlag){
-				if(propety.slowPropNum>0 || isDebugMode()){
-					slowTime = System.currentTimeMillis()/1000;
-					slowFlag = true;
-					if(!isDebugMode()){
-						propety.slowPropNum--;
-					}	
-				}
-			}
-		} else if(keyState.contains(KeyCode.NUM2) && own.status!=1){  //隐身技能
-			keyState.remove(KeyCode.NUM2);
-			if(own.status!=2){
-				if(propety.hidePropNum>0 || isDebugMode()){
-					if(Propety.useHidePropNum<5){
-						hideTime = System.currentTimeMillis()/1000;
-						own.status = 2;  //隐身状态
-						hideFlag = true;
+			if(own.status!=1){
+				if(!okPressed){
+					if(propety.airDropPropNum>0 || isDebugMode()){
+						int x = 25;//own.mapx-120;
+						int y = -30;//own.mapy+own.height/2;
+						for(int i=0;i<6;i++){
+							weapon.createParaDrop(own, x, y, 2);
+							x += own.width+30;
+						}
 						if(!isDebugMode()){
-							propety.hidePropNum--;
-							Propety.useHidePropNum++;
+							propety.airDropPropNum--;
 						}
-					}else{
-						DrawGame.msg = "单关使用已超过5次";
-						DrawGame.msgTime = System.currentTimeMillis()/1000;
+						startTime = System.currentTimeMillis()/1000;
+						okPressed = true;
 					}
 				}
 			}
-		} else if(keyState.contains(KeyCode.NUM6) && own.status!=1){  //激光穿透弹
-			keyState.remove(KeyCode.NUM6);
-			if(!okPressed){
-				if(propety.laserPropNum>0 || isDebugMode()){
-					int x = own.mapx+62-146, y = own.mapy+35;
-					weapon.createLaser(own.id, x, y, 2, currLevel, difficultLevel);
-					startTime3 = System.currentTimeMillis()/1000;
-					startTime = System.currentTimeMillis()/1000;
-					okPressed = true;
-					if(!isDebugMode()){
-						propety.laserPropNum--;
+		} else if(keyState.contains(KeyCode.NUM5)){ //连射(技能)
+			keyState.remove(KeyCode.NUM5);
+			if(own.status!=1){
+				if(!dartleFlag){
+					if(propety.dartlePropNum>0 || isDebugMode()){
+						propety.dartlePropNum--;
+						dartleFlag=true;
 					}
 				}
 			}
-		} else if(keyState.contains(KeyCode.NUM1) && own.status!=1){ //能量防护罩
-			keyState.remove(KeyCode.NUM1);
-			if(!okPressed){
-				if(!protectionFlag){
-					if(propety.energyPropNum>0 || isDebugMode()){
-						if(own.status!=2){
-							weapon.createEnergyProtection(own.id, own.mapx, own.mapy, 2);
-							pFlag = 1;
-							protectionFlag = true;
-							okPressed = true;
-							startTime = System.currentTimeMillis()/1000;
+		} else if(keyState.contains(KeyCode.NUM3)){ //降低敌方速度(技能)
+			keyState.remove(KeyCode.NUM3);
+			if(own.status!=1){
+				if(!slowFlag){
+					if(propety.slowPropNum>0 || isDebugMode()){
+						slowTime = System.currentTimeMillis()/1000;
+						slowFlag = true;
+						if(!isDebugMode()){
+							propety.slowPropNum--;
+						}	
+					}
+				}
+			}
+		} else if(keyState.contains(KeyCode.NUM2)){  //隐身技能
+			keyState.remove(KeyCode.NUM2);
+			if(own.status!=1){
+				if(own.status!=2){
+					if(propety.hidePropNum>0 || isDebugMode()){
+						if(Propety.useHidePropNum<5){
+							hideTime = System.currentTimeMillis()/1000;
+							own.status = 2;  //隐身状态
+							hideFlag = true;
 							if(!isDebugMode()){
-								propety.energyPropNum--;
+								propety.hidePropNum--;
+								Propety.useHidePropNum++;
 							}
-						}
-					}
-				}
-			}
-		}else if(keyState.contains(KeyCode.NUM8) && own.status!=1){  //增加一条生命数
-			keyState.remove(KeyCode.NUM8);
-			if(!okPressed){
-				if(propety.limitBooldPropNum>0 || isDebugMode()){
-					if(own.lifeNum<5){
-						if(Propety.useLimitBooldPropNum>=2){
-							DrawGame.msg = "单关使用不能超过2次";
-							DrawGame.msgTime = System.currentTimeMillis()/1000;
 						}else{
-							own.lifeNum++;
-							okPressed = true;
-							startTime = System.currentTimeMillis()/1000;
-							if(!isDebugMode()){
-								propety.limitBooldPropNum--;
-								Propety.useLimitBooldPropNum++;
-							}
+							DrawGame.msg = "单关使用已超过5次";
+							DrawGame.msgTime = System.currentTimeMillis()/1000;
 						}
-					}else{
-						DrawGame.msg = "不能超过5条生命";
-						DrawGame.msgTime = System.currentTimeMillis()/1000;
 					}
 				}
 			}
-		}else if(keyState.contains(KeyCode.NUM7) && own.status!=1){ //回血
-			keyState.remove(KeyCode.NUM7);
-			if(!okPressed){
-				if(propety.medigelPropNum>0 || isDebugMode()){
-					if(Propety.useMedigelPropNum<3){
-						if(own.nonceLife<own.limitLife){
-							own.nonceLife = own.limitLife;
-							okPressed = true;
-							startTime = System.currentTimeMillis()/1000;
-							if(!isDebugMode()){
-								propety.medigelPropNum--;
-								Propety.useMedigelPropNum++;
+		} else if(keyState.contains(KeyCode.NUM6)){  //激光穿透弹
+			keyState.remove(KeyCode.NUM6);
+			if(own.status!=1){
+				if(!okPressed){
+					if(propety.laserPropNum>0 || isDebugMode()){
+						int x = own.mapx+62-146, y = own.mapy+35;
+						weapon.createLaser(own.id, x, y, 2, currLevel, difficultLevel);
+						startTime3 = System.currentTimeMillis()/1000;
+						startTime = System.currentTimeMillis()/1000;
+						okPressed = true;
+						if(!isDebugMode()){
+							propety.laserPropNum--;
+						}
+					}
+				}
+			}
+		} else if(keyState.contains(KeyCode.NUM1)){ //能量防护罩
+			keyState.remove(KeyCode.NUM1);
+			if(own.status!=1){
+				if(!okPressed){
+					if(!protectionFlag){
+						if(propety.energyPropNum>0 || isDebugMode()){
+							if(own.status!=2){
+								weapon.createEnergyProtection(own.id, own.mapx, own.mapy, 2);
+								pFlag = 1;
+								protectionFlag = true;
+								okPressed = true;
+								startTime = System.currentTimeMillis()/1000;
+								if(!isDebugMode()){
+									propety.energyPropNum--;
+								}
 							}
 						}
-					}else{
-						DrawGame.msg = "单关使用已超过3次";
-						DrawGame.msgTime = System.currentTimeMillis()/1000;
+					}
+				}
+			}
+		}else if(keyState.contains(KeyCode.NUM8)){  //增加一条生命数
+			keyState.remove(KeyCode.NUM8);
+			if(own.status!=1){
+				if(!okPressed){
+					if(propety.limitBooldPropNum>0 || isDebugMode()){
+						if(own.lifeNum<5){
+							if(Propety.useLimitBooldPropNum>=2){
+								DrawGame.msg = "单关使用不能超过2次";
+								DrawGame.msgTime = System.currentTimeMillis()/1000;
+							}else{
+								own.lifeNum++;
+								okPressed = true;
+								startTime = System.currentTimeMillis()/1000;
+								if(!isDebugMode()){
+									propety.limitBooldPropNum--;
+									Propety.useLimitBooldPropNum++;
+								}
+							}
+						}else{
+							DrawGame.msg = "不能超过5条生命";
+							DrawGame.msgTime = System.currentTimeMillis()/1000;
+						}
+					}
+				}
+			}
+		}else if(keyState.contains(KeyCode.NUM7)){ //回血
+			keyState.remove(KeyCode.NUM7);
+			if(own.status!=1){
+				if(!okPressed){
+					if(propety.medigelPropNum>0 || isDebugMode()){
+						if(Propety.useMedigelPropNum<3){
+							if(own.nonceLife<own.limitLife){
+								own.nonceLife = own.limitLife;
+								okPressed = true;
+								startTime = System.currentTimeMillis()/1000;
+								if(!isDebugMode()){
+									propety.medigelPropNum--;
+									Propety.useMedigelPropNum++;
+								}
+							}
+						}else{
+							DrawGame.msg = "单关使用已超过3次";
+							DrawGame.msgTime = System.currentTimeMillis()/1000;
+						}
 					}
 				}
 			}
@@ -651,7 +671,7 @@ public class SubmarineGameEngine extends GameCanvasEngine implements Common{
 					passState=-1;
 					ServiceWrapper sw = getServiceWrapper();
 					GameAttainment ga = sw.readAttainment(attainmentId);
-					if(((ga==null && own.scores>0) || (ga.getScores()<=own.scores) && own.scores>0)){
+					if(((ga==null && own.scores>0) || (ga!=null && (ga.getScores()<=own.scores) && own.scores>0))){
 						gameRecord.saveGameAttainment(own, boss, currLevel);
 					}
 					clearGamePlaying();
@@ -785,11 +805,11 @@ public class SubmarineGameEngine extends GameCanvasEngine implements Common{
 				}
 				ServiceWrapper sw = getServiceWrapper();
 				GameRecord gr = sw.readRecord(attainmentId);
-				if(((gr==null && own.scores>0) || (gr.getScores()<=own.scores) && own.scores>0)){
+				if(((gr==null && own.scores>0) || (gr!=null && (gr.getScores()<=own.scores) && own.scores>0))){
 					gameRecord.saveGameRecord(own, boss, currLevel);
 				}
 				GameAttainment ga = sw.readAttainment(attainmentId);
-				if(((ga==null && own.scores>0) || (ga.getScores()<=own.scores) && own.scores>0)){
+				if(((ga==null && own.scores>0) || (ga!=null && (ga.getScores()<=own.scores) && own.scores>0))){
 					gameRecord.saveGameAttainment(own, boss, currLevel);
 				}
 			}else if(passState==-1){
@@ -1146,7 +1166,6 @@ public class SubmarineGameEngine extends GameCanvasEngine implements Common{
 		isSupportFavor = Configurations.getInstance().isFavorWayTelcomgd();
 		System.out.println("isSupportFavor:"+isSupportFavor);
 		//isSupportFavor = true;
-		status = GAME_STATUS_MAIN_MENU;
 		mainIndex = 0;
 		draw = new DrawGame(this); 
 		createRole = new CreateRole();

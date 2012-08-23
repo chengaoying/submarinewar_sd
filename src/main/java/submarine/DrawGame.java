@@ -26,7 +26,7 @@ public class DrawGame implements Common{
 		this.engine = engine;
 	}	
 
-	private Image imgMain1, imgMain2, imgBg, imgMapUp, imgMapCenter, imgMapDown, imgMapRight, imgKa, imgInfo, imgConfirm, imgDirection,imgMain3, imgSubmirine;
+	private Image imgMain1, imgMain2, imgBg_left,imgBg_down,imgBg_right,imgBg_up, imgMapUp, imgMapCenter, imgMapDown, imgMapRight, imgKa, imgInfo, imgConfirm, imgDirection,imgMain3, imgSubmirine;
 	private Image imgLevel, imgMain4, imgBiglevel, imgPrompt, imgRanking, imgShop;
 	private Image imgBlood, imgBlood2, imgMenu, imgNumber2, imgGk, imgGameInfo, imgPass, imgOver,imgMedal,imgWarning;
 	private Image imgCallBoard, imgLock, imgPurchaseIcon, imgBoat, imgIceBerg, imgIceBerg2, imgPrompt2;
@@ -92,15 +92,31 @@ public class DrawGame implements Common{
 	public static long msgTime,msgTime2;
 	private int fontSize = 40;
 	
-	/*主菜单*/
-	public void drawMainMenu(SGraphics g, int index, int favorIndex){
-		if(imgBg == null){
+	/*背景*/
+	public void drawBG(SGraphics g){
+		if (imgBg_left == null || imgBg_down == null || imgBg_right == null || imgBg_up == null) {
 			try {
-				imgBg = Image.createImage("/bg.jpg");
+				imgBg_left = Image.createImage("/bg_left.jpg");
+				imgBg_down = Image.createImage("/bg_down.jpg");
+				imgBg_right = Image.createImage("/bg_right.jpg");
+				imgBg_up = Image.createImage("/bg_up.jpg");
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
 		}
+		int x = -35, y = -20;
+		g.drawImage(imgBg_left, x, y, TopLeft);
+		g.drawImage(imgBg_down, x+imgBg_left.getWidth(), y+720-imgBg_down.getHeight(), TopLeft);
+		g.drawImage(imgBg_right, x+1280-imgBg_right.getWidth(), y, TopLeft);
+		g.drawImage(imgBg_up, x+imgBg_left.getWidth(), y, TopLeft);
+	}
+	
+	public void showInit(SGraphics g){
+		drawBG(g);
+	}
+	
+	/*主菜单*/
+	public void drawMainMenu(SGraphics g, int index, int favorIndex){
 		if (imgMain1 == null || imgMain2 == null) {
 			try {
 				imgMain1 = Image.createImage("/main1.jpg");
@@ -112,7 +128,6 @@ public class DrawGame implements Common{
 		/*g.setClip(0, 0, screenW, screenH);
 		g.setColor(0X000000);
 		g.fillRect(0, 0, screenW, screenH);*/
-		g.drawImage(imgBg, -35, -20, TopLeft);
 		g.drawImage(imgMain1, 0, 0, TopLeft);
 		int menuAxis[][] = { { 450, 280 }, { 450, 345 }, { 450, 410 },
 				{ 450, 475 }, { 450, 540 },{ 450, 605 } };
@@ -195,6 +210,7 @@ public class DrawGame implements Common{
 		/*KeyState keyState = engine.getKeyState();
 		engine.addDebugUserMessage(getKeyCodeStr(keyState.getCurrentKeyCode())+" M:"+keyState.hasPersistMoveEvent()
 				+" LM:"+keyState.containsMoveEvent(KeyCode.LEFT)+" RM:"+keyState.containsMoveEvent(KeyCode.RIGHT));*/
+		g.setClip(0, 0, 1210, 680);
 		
 		if (imgMapUp==null || imgMapCenter==null || imgMapDown==null || imgMapRight==null
 				|| imgBoat==null || imgIceBerg==null || imgIceBerg2==null || imgWarning==null) {
@@ -309,6 +325,7 @@ public class DrawGame implements Common{
 		}catch(Exception e){
 			e.printStackTrace();
 		}
+		g.setClip(0, 0, screenW, screenH);
 	}
 	
 	/*难度选择界面*/
@@ -606,6 +623,7 @@ public class DrawGame implements Common{
 	/*玩家通关信息*/
 	public int tempY=-200;
 	public void drawUserGameInfo(SGraphics g, int passState, int level, Role own, int index, int difficultLevel){
+		g.setClip(0, 0, 1210, 680);
 		if(imgMain3==null || imgGameInfo==null || imgPass==null || imgOver==null 
 				|| imgMedal==null || imgPassBg==null || imgPassText==null || imgPassFireWork==null
 				|| imgPassSelect==null){
@@ -645,8 +663,8 @@ public class DrawGame implements Common{
 					tempY += 25;
 				}else{
 					int w = imgPassText.getWidth()/6, h = imgPassText.getHeight();
-					g.drawRegion(imgPassText, w*5, 0, w, h, 0, 358, 302, TopLeft);
-					g.drawRegion(imgPassText, textIndex*w, 0, w, h, 0, 358, 302, TopLeft);
+					g.drawRegion(imgPassText, w*5, 0, w, h, 0, 350-280, 300-110, TopLeft);
+					g.drawRegion(imgPassText, textIndex*w, 0, w, h, 0, 350-280, 300-110, TopLeft);
 					if(textIndex<5){
 						if(textFlag<=3){
 							textFlag++;
@@ -730,6 +748,7 @@ public class DrawGame implements Common{
 				}
 			}
 		}
+		g.setClip(0, 0, screenW, screenH);
 	}
 	/*过关信息*/
 	private void info(SGraphics g, int level, Role own, String str){
@@ -1142,9 +1161,14 @@ public class DrawGame implements Common{
 	
 	/*底图*/
 	public void clearBg(){
-		if(imgBg != null){
-			imgBg = null;
+		if(imgBg_left != null || imgBg_down != null
+				|| imgBg_right != null || imgBg_up != null){
+			imgBg_left = null;
+			imgBg_down = null;
+			imgBg_right = null;
+			imgBg_up = null;
 		}
+		
 	}
 	
 	/*通关后初始数据*/
